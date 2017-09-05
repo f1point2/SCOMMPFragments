@@ -1,0 +1,81 @@
+<TypeDefinitions>
+    <EntityTypes>
+      <ClassTypes>
+        <ClassType ID="F12.Payments.AppServer" Base="Windows!Microsoft.Windows.ComputerRole" Accessibility="Public" Abstract="false" Hosted="true" Singleton="false">
+        </ClassType>
+      </ClassTypes>
+    </EntityTypes>
+  </TypeDefinitions>
+  <Monitoring>
+    <Discoveries>
+      <Discovery ID="F12.Payments.AppServer.Discovery" Target="Windows!Microsoft.Windows.Server.OperatingSystem" Enabled="true" ConfirmDelivery="false" Remotable="true" Priority="Normal">
+        <Category>Discovery</Category>
+        <DiscoveryTypes>
+          <DiscoveryClass TypeID="F12.Payments.AppServer" />
+        </DiscoveryTypes>
+        <DataSource ID="DS" TypeID="Windows!Microsoft.Windows.FilteredRegistryDiscoveryProvider">
+          <ComputerName>$Target/Host/Property[Type="Windows!Microsoft.Windows.Computer"]/PrincipalName$</ComputerName>
+          <RegistryAttributeDefinitions>
+            <RegistryAttributeDefinition>
+              <!-- 
+PathType - Integer
+  Specifies whether the path is a key or a value.
+  • 0—Specifies that the path is to a key, for which the existence of the key should be checked.
+  • 1—Specifies that the path is to a value that should be retrieved.
+
+AttributeType -   Integer
+  The data type of the value to return:
+  • 0—Boolean
+  • 1—String
+  • 2—Integer
+  • 3—Float
+Values 1, 2, and 3 are used only when the PathType is set to 1.
+-->
+              <AttributeName>SeedExists</AttributeName>
+              <Path>SOFTWARE\SCOMDiscoveryData\Function</Path>
+              <PathType>1</PathType>
+              <AttributeType>1</AttributeType>
+            </RegistryAttributeDefinition>
+          </RegistryAttributeDefinitions>
+          <Frequency>60</Frequency>
+          <ClassId>$MPElement[Name="F12.Payments.AppServer"]$</ClassId>
+          <InstanceSettings>
+            <Settings>
+              <Setting>
+                <Name>$MPElement[Name="Windows!Microsoft.Windows.Computer"]/PrincipalName$</Name>
+                <Value>$Target/Host/Property[Type="Windows!Microsoft.Windows.Computer"]/PrincipalName$</Value>
+              </Setting>
+              <Setting>
+                <Name>$MPElement[Name="System!System.Entity"]/DisplayName$</Name>
+                <Value>$Target/Host/Property[Type="Windows!Microsoft.Windows.Computer"]/PrincipalName$</Value>
+              </Setting>
+            </Settings>
+          </InstanceSettings>
+          <Expression>
+              <RegExExpression>
+                <ValueExpression>
+                  <XPathQuery Type="String">Values/SeedExists</XPathQuery>
+                </ValueExpression>
+                <Operator>ContainsSubstring</Operator>
+                <Pattern>*******************</Pattern>
+              </RegExExpression>
+          </Expression>
+        </DataSource>
+      </Discovery>
+    </Discoveries>
+  </Monitoring>
+  <LanguagePacks>
+    <LanguagePack ID="ENU" IsDefault="true">
+      <DisplayStrings>
+        <DisplayString ElementID="F12.Payments.AppServer">
+          <Name>F12 Application Server</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="F12.Payments.AppServer.Discovery">
+          <Name>Discover F12 Payments Application Server</Name>
+          <Description>Description for the new discovery.</Description>
+        </DisplayString>
+      </DisplayStrings>
+      <KnowledgeArticles></KnowledgeArticles>
+    </LanguagePack>
+  </LanguagePacks>
