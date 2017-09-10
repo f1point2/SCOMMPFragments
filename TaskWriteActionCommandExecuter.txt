@@ -1,0 +1,25 @@
+  <Monitoring>
+    <Tasks>
+      <Task ID="F12.Library.Tasks.SQL2016.HealthServiceSidType.Task" Accessibility="Internal" Enabled="true" Target="SQL2016Disc!Microsoft.SQLServer.2016.Seed" Timeout="300" Remotable="true">
+        <Category>Maintenance</Category>
+        <WriteAction ID="WA" TypeID="System!System.CommandExecuter">
+          <ApplicationName />
+          <WorkingDirectory>%WINDIR%\System32</WorkingDirectory>
+          <CommandLine>sc sidtype HealthService unrestricted</CommandLine>
+          <TimeoutSeconds>120</TimeoutSeconds>
+          <RequireOutput>true</RequireOutput>
+          <Files />
+        </WriteAction>
+      </Task>
+    </Tasks>
+  </Monitoring>
+  <LanguagePacks>
+    <LanguagePack ID="ENU" IsDefault="true">
+      <DisplayStrings>
+        <DisplayString ElementID="F12.Library.Tasks.SQL2016.HealthServiceSidType.Task">
+          <Name>SQL 2016 Set Service SID</Name>
+          <Description></Description>
+        </DisplayString>
+      </DisplayStrings>
+    </LanguagePack>
+  </LanguagePacks>

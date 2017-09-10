@@ -1,0 +1,79 @@
+ <!-- An example of a task that runs a VB Script - for this; we should use a single module type that is called by each task which is done for SQL 2014 and SQL 2016 -->
+  <TypeDefinitions>
+    <ModuleTypes>
+      <WriteActionModuleType ID="F12.Library.Tasks.SQL2012.SQLSetHSSIDAndRestartHS.WA" Accessibility="Public" Batching="false">
+        <Configuration />
+        <ModuleImplementation Isolation="Any">
+          <Composite>
+            <MemberModules>
+              <WriteAction ID="ScriptWA" TypeID="Windows!Microsoft.Windows.ScriptWriteAction">
+                <ScriptName>SetHSServiceSidStateandRestart.vbs</ScriptName>
+                <Arguments />
+                <ScriptBody>
+                  '==========================================================================
+                  '
+                  ' NAME: SetHSServiceSidStateandRestart.vbs by Kevin Holman
+                  '
+                  ' COMMENT: This is a write action script to set the HealthService to use a Service SID then bounce the agent
+                  '
+                  '==========================================================================
+                  dim objWMIService, objProcess, strCommand
+                  dim oShell, oShellEnv, strShell, computerName, oAPI
+
+                  Set oShell = WScript.CreateObject("WScript.Shell")
+                  Set oAPI = CreateObject("MOM.ScriptAPI")
+
+                  'Log script event that we are starting task
+                  Call oAPI.LogScriptEvent("SetHSServiceSidStateandRestart.vbs", 8675, 0, "Starting configuration of HealthService Service SID type then attempting restart of SCOM Health Service")
+
+                  'configure the sidtype for HealthService
+                  oShell.run "sc sidtype HealthService unrestricted"
+
+                  'start the agent restart process
+                  set oShellEnv = oShell.Environment("Process")
+                  computerName = oShellEnv("ComputerName")
+
+                  strCommand = "cmd /c net stop HealthService &amp; cmd /c net start HealthService"
+
+                  Set objWMIService = GetObject("winmgmts:{impersonationLevel=impersonate}!\\.\root\cimv2")
+
+                  Set objProcess = objWMIService.Get("Win32_Process")
+                  Set objProgram = objProcess.Methods_( _
+                  "Create").InParameters.SpawnInstance_
+                  objProgram.CommandLine = strCommand
+
+                  Set strShell = objWMIService.ExecMethod( _
+                  "Win32_Process", "Create", objProgram)
+
+                  WScript.echo "Sent restart command for SCOM Health Service on " &amp; computerName
+                </ScriptBody>
+                <TimeoutSeconds>60</TimeoutSeconds>
+              </WriteAction>
+            </MemberModules>
+            <Composition>
+              <Node ID="ScriptWA" />
+            </Composition>
+          </Composite>
+        </ModuleImplementation>
+        <InputType>System!System.BaseData</InputType>
+      </WriteActionModuleType>
+    </ModuleTypes>
+  </TypeDefinitions>
+  <Monitoring>
+    <Tasks>
+      <Task ID="F12.Library.Tasks.HealthServiceSidTypeAndRestart.Task" Accessibility="Internal" Enabled="true" Target="SQL2012Disc!Microsoft.SQLServer.2012.Seed" Timeout="300" Remotable="true">
+        <Category>Maintenance</Category>
+        <WriteAction ID="SetHSServiceSidStateandRestart.WA" TypeID="F12.Library.Tasks.SQL2012.SQLSetHSSIDAndRestartHS.WA" />
+      </Task>
+    </Tasks>
+  </Monitoring>
+  <LanguagePacks>
+    <LanguagePack ID="ENU" IsDefault="true">
+      <DisplayStrings>
+        <DisplayString ElementID="F12.Library.Tasks.HealthServiceSidTypeAndRestart.Task">
+          <Name>SQL 2012 Set Service SID and Restart Health Service</Name>
+          <Description></Description>
+        </DisplayString>
+      </DisplayStrings>
+    </LanguagePack>
+  </LanguagePacks>
