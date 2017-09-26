@@ -9,7 +9,7 @@
   </TypeDefinitions>
   <Monitoring>
     <Discoveries>
-      <Discovery ID="F12.Payments.Discovery.AppServer" Target="Windows!Microsoft.Windows.Server.OperatingSystem" Enabled="true" ConfirmDelivery="false" Remotable="true" Priority="Normal">
+      <Discovery ID="F12.Payments.AppServer.Discovery" Target="Windows!Microsoft.Windows.Server.OperatingSystem" Enabled="true" ConfirmDelivery="false" Remotable="true" Priority="Normal">
         <Category>Discovery</Category>
         <DiscoveryTypes>
           <DiscoveryClass TypeID="F12.Payments.AppServer" />
