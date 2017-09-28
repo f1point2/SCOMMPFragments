@@ -1,0 +1,118 @@
+<!-- This is by Jonathan Almquist -->
+<!-- http://blog.scomskills.com/event-description-pattern-matching-with-minimal-impact/ -->
+
+ <Monitoring>
+    <Rules>
+      <Rule ID="F12.Payments.NTEvent.Alert.Error632.WithCD.Description" ConfirmDelivery="true" DiscardLevel="100" Enabled="true" Priority="Normal" Remotable="false" Target="F12.Payments.AppServer">
+        <Category>Alert</Category>
+        <DataSources>
+          <DataSource ID="BasicEventDetection" TypeID="Windows!Microsoft.Windows.EventProvider">
+            <ComputerName>$Target/Host/Property[Type="Windows!Microsoft.Windows.Computer"]/NetworkName$</ComputerName>
+            <LogName>Application</LogName>
+            <Expression>
+              <And>
+                <Expression>
+                  <SimpleExpression>
+                    <ValueExpression>
+                      <XPathQuery>EventSourceName</XPathQuery>
+                    </ValueExpression>
+                    <Operator>Equal</Operator>
+                    <ValueExpression>
+                      <Value>EventCreate</Value>
+                    </ValueExpression>
+                  </SimpleExpression>
+                </Expression>
+                <Expression>
+                  <SimpleExpression>
+                    <ValueExpression>
+                      <XPathQuery>EventDisplayNumber</XPathQuery>
+                    </ValueExpression>
+                    <Operator>Equal</Operator>
+                    <ValueExpression>
+                      <Value>632</Value>
+                    </ValueExpression>
+                  </SimpleExpression>
+                </Expression>
+                <Expression>
+                  <SimpleExpression>
+                    <ValueExpression>
+                      <XPathQuery>EventLevel</XPathQuery>
+                    </ValueExpression>
+                    <Operator>Equal</Operator>
+                    <ValueExpression>
+                      <Value>1</Value>
+                    </ValueExpression>
+                  </SimpleExpression>
+                </Expression>
+              </And>
+            </Expression>
+          </DataSource>
+        </DataSources>
+        <ConditionDetection ID="FilterDescription" TypeID="System!System.ExpressionFilter">
+          <Expression>
+            <RegExExpression>
+              <ValueExpression>
+                <XPathQuery>EventDescription</XPathQuery>
+              </ValueExpression>
+              <Operator>MatchesRegularExpression</Operator>
+              <Pattern>Error</Pattern>
+            </RegExExpression>
+          </Expression>
+        </ConditionDetection>
+        <WriteActions>
+          <WriteAction ID="Alert" TypeID="Health!System.Health.GenerateAlert">
+            <Priority>1</Priority>
+            <Severity>2</Severity>
+            <AlertMessageId>$MPElement[Name="F12.Payments.NTEvent.Alert.Error632.WithCD.Description.AlertMessage"]$</AlertMessageId>
+           <AlertParameters>
+              <AlertParameter1>$Data[Default='']/EventDescription$</AlertParameter1>
+             <AlertParameter2>$Target/Host/Property[Type="Windows!Microsoft.Windows.Computer"]/PrincipalName$</AlertParameter2>
+            </AlertParameters>
+                    <Suppression>
+              <SuppressionValue>$Data/EventDisplayNumber$</SuppressionValue>
+              <SuppressionValue>$Data/LoggingComputer$</SuppressionValue>
+              <SuppressionValue>$Data/EventLevel$</SuppressionValue>
+            </Suppression>
+          </WriteAction>
+        </WriteActions>
+      </Rule>
+    </Rules>
+  </Monitoring>
+  <Presentation>
+    <StringResources>
+      <StringResource ID="F12.Payments.NTEvent.Alert.Error632.WithCD.Description.AlertMessage"/>
+    </StringResources>
+  </Presentation>
+  <LanguagePacks>
+    <LanguagePack ID="ENU" IsDefault="true">
+      <DisplayStrings>
+        <DisplayString ElementID="F12.Payments.NTEvent.Alert.Error632.WithCD.Description">
+          <Name>Event 632 with Description error</Name>
+        </DisplayString>
+        <DisplayString ElementID="F12.Payments.NTEvent.Alert.Error632.WithCD.Description.AlertMessage">
+          <Name>Event 632 with Description error</Name>
+          <Description>Server: {1}
+
+Event Description: {0}</Description>
+        </DisplayString>
+      </DisplayStrings>
+      <KnowledgeArticles>
+        <KnowledgeArticle ElementID="F12.Payments.NTEvent.Alert.Error632.WithCD.Description" Visible="true">
+          <MamlContent>
+            <maml:section xmlns:maml="http://schemas.microsoft.com/maml/2004/10">
+              <maml:title>Summary</maml:title>
+              <maml:para>Generates an Alert when Event 632 appears in the Windows Application Log.</maml:para>
+            </maml:section>
+            <maml:section xmlns:maml="http://schemas.microsoft.com/maml/2004/10">
+              <maml:title>Causes</maml:title>
+              <maml:para>Someone pulled the plug out.</maml:para>
+            </maml:section>
+            <maml:section xmlns:maml="http://schemas.microsoft.com/maml/2004/10">
+              <maml:title>Resolutions</maml:title>
+              <maml:para>Sit tight and grab some coffee.</maml:para>
+            </maml:section>
+          </MamlContent>
+        </KnowledgeArticle>
+      </KnowledgeArticles>
+    </LanguagePack>
+  </LanguagePacks>
