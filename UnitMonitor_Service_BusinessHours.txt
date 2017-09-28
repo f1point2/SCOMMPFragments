@@ -1,0 +1,56 @@
+<!-- Use the LibraryMonitorTypeServiceMonitorBusinessHours Monitor Type -->
+  <Monitoring>
+    <Monitors>
+      <UnitMonitor ID="F12.Aibi.UnitMonitor.Service.BusinessHours.Aibi" Accessibility="Public" Enabled="true" Target="F12.Aibi.AppServer" ParentMonitorID="Health!System.Health.AvailabilityState" Remotable="true" Priority="Normal" TypeID="Microsoft.Windows.CheckNTServiceStateWithBusinessHoursMonitorType" ConfirmDelivery="false">
+        <Category>AvailabilityHealth</Category>
+        <AlertSettings AlertMessage="F12.Aibi.UnitMonitor.Service.BusinessHours.Aibi.AlertMessage">
+          <AlertOnState>Error</AlertOnState>
+          <AutoResolve>true</AutoResolve>
+          <AlertPriority>Normal</AlertPriority>
+          <AlertSeverity>MatchMonitorHealth</AlertSeverity>
+          <AlertParameters>
+            <AlertParameter1>$Target/Host/Property[Type='Windows!Microsoft.Windows.Computer']/PrincipalName$</AlertParameter1>
+          </AlertParameters>
+        </AlertSettings>
+        <OperationalStates>
+          <OperationalState ID="Running" MonitorTypeStateID="Running" HealthState="Success" />
+          <OperationalState ID="NotRunning" MonitorTypeStateID="NotRunning" HealthState="Error" />
+        </OperationalStates>
+        <Configuration>
+          <ComputerName>$Target/Host/Property[Type='Windows!Microsoft.Windows.Computer']/PrincipalName$</ComputerName>
+          <ServiceName>Aibi</ServiceName>
+          <CheckStartupType>False</CheckStartupType>
+          <From>15:20</From>
+          <To>16:00</To>
+          <Days>127</Days>
+        </Configuration>
+      </UnitMonitor>
+    </Monitors>
+  </Monitoring>
+  <Presentation>
+    <StringResources>
+      <StringResource ID="F12.Aibi.UnitMonitor.Service.BusinessHours.Aibi.AlertMessage" />
+    </StringResources>
+  </Presentation>
+  <LanguagePacks>
+    <LanguagePack ID="ENU" IsDefault="true">
+      <DisplayStrings>
+        <DisplayString ElementID="F12.Aibi.UnitMonitor.Service.BusinessHours.Aibi">
+          <Name>Aibi Monitor</Name>
+          <Description>Description for the new unit monitor.</Description>
+        </DisplayString>
+        <DisplayString ElementID="F12.Aibi.UnitMonitor.Service.BusinessHours.Aibi.AlertMessage">
+          <Name>Aibi Service is Not Running - Examples Simple Monitors</Name>
+          <Description>The Aibi Service is not running on {0}</Description>
+        </DisplayString>
+        <DisplayString ElementID="F12.Aibi.UnitMonitor.Service.BusinessHours.Aibi" SubElementID="Running">
+          <Name>Running</Name>
+          <Description>Running</Description>
+        </DisplayString>
+        <DisplayString ElementID="F12.Aibi.UnitMonitor.Service.BusinessHours.Aibi" SubElementID="NotRunning">
+          <Name>NotRunning</Name>
+          <Description>NotRunning</Description>
+        </DisplayString>
+      </DisplayStrings>
+    </LanguagePack>
+  </LanguagePacks>
