@@ -52,5 +52,24 @@
           <Description>NotRunning</Description>
         </DisplayString>
       </DisplayStrings>
-    </LanguagePack>
+      <KnowledgeArticles>
+        <KnowledgeArticle ElementID="F12.Aibi.UnitMonitor.Service.BusinessHours.Aibi" Visible="true">
+          <MamlContent>
+            <maml:section xmlns:maml="http://schemas.microsoft.com/maml/2004/10">
+              <maml:title>Summary</maml:title>
+              <maml:para>Monitors the status of the Lake Aibi Service during specified business hours.</maml:para>
+            </maml:section>
+            <maml:section xmlns:maml="http://schemas.microsoft.com/maml/2004/10">
+              <maml:title>Causes</maml:title>
+              <maml:para>The service stops when it is overwhelmed with work.</maml:para>
+            </maml:section>
+            <maml:section xmlns:maml="http://schemas.microsoft.com/maml/2004/10">
+              <maml:title>Resolutions</maml:title>
+              <maml:para>Start the service and grab some coffee.</maml:para>
+            </maml:section>
+          </MamlContent>
+        </KnowledgeArticle>
+      </KnowledgeArticles>
+    </LanguagePack>  
   </LanguagePacks>
+</ManagementPackFragment>
