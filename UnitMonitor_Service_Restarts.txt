@@ -1,6 +1,6 @@
   <Monitoring>
     <Rules>
-      <Rule ID="F12.Aibi.Rule.NTEvent.Service.WithRestart.Aibi" Target="F12.Aibi.AppServer" Enabled="true" ConfirmDelivery="false" Remotable="true" Priority="Normal" DiscardLevel="100">
+      <Rule ID="F12.Payments.Rule.NTEvent.Service.WithRestart.Aibi" Target="F12.Payments.AppServer" Enabled="true" ConfirmDelivery="false" Remotable="true" Priority="Normal" DiscardLevel="100">
         <Category>Alert</Category>
         <DataSources>
           <DataSource ID="DS" TypeID="Windows!Microsoft.Windows.EventProvider">
@@ -38,7 +38,7 @@
           <WriteAction ID="Alert" TypeID="Health!System.Health.GenerateAlert">
             <Priority>1</Priority>
             <Severity>2</Severity>
-            <AlertMessageId>$MPElement[Name="F12.Aibi.Rule.NTEvent.Service.WithRestart.Aibi.AlertMessage"]$</AlertMessageId>
+            <AlertMessageId>$MPElement[Name="F12.Payments.Rule.NTEvent.Service.WithRestart.Aibi.AlertMessage"]$</AlertMessageId>
             <AlertParameters>
               <AlertParameter1>$Target/Host/Property[Type='Windows!Microsoft.Windows.Computer']/PrincipalName$</AlertParameter1>
             </AlertParameters>
@@ -47,7 +47,7 @@
       </Rule>
     </Rules>
     <Monitors>
-      <UnitMonitor ID="F12.Aibi.UnitMonitor.Service.WithRestart.Aibi" Accessibility="Public" Enabled="true" Target="F12.Aibi.AppServer" ParentMonitorID="Health!System.Health.AvailabilityState" Remotable="true" Priority="Normal" TypeID="Windows!Microsoft.Windows.CheckNTServiceStateMonitorType" ConfirmDelivery="false">
+      <UnitMonitor ID="F12.Payments.UnitMonitor.Service.WithRestart.Aibi" Accessibility="Public" Enabled="true" Target="F12.Payments.AppServer" ParentMonitorID="Health!System.Health.AvailabilityState" Remotable="true" Priority="Normal" TypeID="Windows!Microsoft.Windows.CheckNTServiceStateMonitorType" ConfirmDelivery="false">
         <Category>AvailabilityHealth</Category>
         <OperationalStates>
           <OperationalState ID="Running" MonitorTypeStateID="Running" HealthState="Success" />
@@ -61,7 +61,7 @@
       </UnitMonitor>
     </Monitors>
     <Recoveries>
-      <Recovery ID="F12.Aibi.AppServer.UnitMonitor.Service.WithRestart.Recovery.Aibi" Accessibility="Public" Enabled="true" Target="F12.Aibi.AppServer" Monitor="F12.Aibi.UnitMonitor.Service.WithRestart.Aibi" ResetMonitor="true" ExecuteOnState="Error" Remotable="true" Timeout="300">
+      <Recovery ID="F12.Payments.AppServer.UnitMonitor.Service.WithRestart.Recovery.Aibi" Accessibility="Public" Enabled="true" Target="F12.Payments.AppServer" Monitor="F12.Payments.UnitMonitor.Service.WithRestart.Aibi" ResetMonitor="true" ExecuteOnState="Error" Remotable="true" Timeout="300">
         <Category>Maintenance</Category>
         <WriteAction ID="ServiceRestartScriptWriteAction" TypeID="Windows!Microsoft.Windows.PowerShellWriteAction">
           <ScriptName>ServiceRestart.ps1$</ScriptName>
@@ -116,35 +116,35 @@
   </Monitoring>
   <Presentation>
     <StringResources>
-      <StringResource ID="F12.Aibi.Rule.NTEvent.Service.WithRestart.Aibi.AlertMessage" />
+      <StringResource ID="F12.Payments.Rule.NTEvent.Service.WithRestart.Aibi.AlertMessage" />
     </StringResources>
   </Presentation>
   <LanguagePacks>
     <LanguagePack ID="ENU" IsDefault="true">
       <DisplayStrings>
-        <DisplayString ElementID="F12.Aibi.UnitMonitor.Service.WithRestart.Aibi">
+        <DisplayString ElementID="F12.Payments.UnitMonitor.Service.WithRestart.Aibi">
           <Name>Aibi Service Monitor</Name>
           <Description>Description for the new unit monitor.</Description>
         </DisplayString>
-        <DisplayString ElementID="F12.Aibi.UnitMonitor.Service.WithRestart.Aibi" SubElementID="Running">
+        <DisplayString ElementID="F12.Payments.UnitMonitor.Service.WithRestart.Aibi" SubElementID="Running">
           <Name>Running</Name>
           <Description>Running</Description>
         </DisplayString>
-        <DisplayString ElementID="F12.Aibi.UnitMonitor.Service.WithRestart.Aibi" SubElementID="NotRunning">
+        <DisplayString ElementID="F12.Payments.UnitMonitor.Service.WithRestart.Aibi" SubElementID="NotRunning">
           <Name>NotRunning</Name>
           <Description>NotRunning</Description>
         </DisplayString>
-        <DisplayString ElementID="F12.Aibi.Rule.NTEvent.Service.WithRestart.Aibi">
+        <DisplayString ElementID="F12.Payments.Rule.NTEvent.Service.WithRestart.Aibi">
           <Name>Aibi Service has not been started after consecutive restarts</Name>
           <Description>Description for the new alert rule.</Description>
         </DisplayString>
-        <DisplayString ElementID="F12.Aibi.Rule.NTEvent.Service.WithRestart.Aibi.AlertMessage">
+        <DisplayString ElementID="F12.Payments.Rule.NTEvent.Service.WithRestart.Aibi.AlertMessage">
           <Name>Aibi Service has not been started after consecutive failures</Name>
           <Description>Aibi Service has not been restarted after consecutive restart failures on {0}</Description>
         </DisplayString>
       </DisplayStrings>
       <KnowledgeArticles>
-        <KnowledgeArticle ElementID="F12.Aibi.UnitMonitor.Service.WithRestart.Aibi" Visible="true">
+        <KnowledgeArticle ElementID="F12.Payments.UnitMonitor.Service.WithRestart.Aibi" Visible="true">
           <MamlContent>
             <maml:section xmlns:maml="http://schemas.microsoft.com/maml/2004/10">
               <maml:title>Summary</maml:title>

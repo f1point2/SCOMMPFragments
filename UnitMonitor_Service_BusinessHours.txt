@@ -1,9 +1,9 @@
 <!-- Use the LibraryMonitorTypeServiceMonitorBusinessHours Monitor Type -->
   <Monitoring>
     <Monitors>
-      <UnitMonitor ID="F12.Aibi.UnitMonitor.Service.BusinessHours.Aibi" Accessibility="Public" Enabled="true" Target="F12.Aibi.AppServer" ParentMonitorID="Health!System.Health.AvailabilityState" Remotable="true" Priority="Normal" TypeID="Microsoft.Windows.CheckNTServiceStateWithBusinessHoursMonitorType" ConfirmDelivery="false">
+      <UnitMonitor ID="F12.Payments.UnitMonitor.Service.BusinessHours.Aibi" Accessibility="Public" Enabled="true" Target="F12.Payments.AppServer" ParentMonitorID="Health!System.Health.AvailabilityState" Remotable="true" Priority="Normal" TypeID="Microsoft.Windows.CheckNTServiceStateWithBusinessHoursMonitorType" ConfirmDelivery="false">
         <Category>AvailabilityHealth</Category>
-        <AlertSettings AlertMessage="F12.Aibi.UnitMonitor.Service.BusinessHours.Aibi.AlertMessage">
+        <AlertSettings AlertMessage="F12.Payments.UnitMonitor.Service.BusinessHours.Aibi.AlertMessage">
           <AlertOnState>Error</AlertOnState>
           <AutoResolve>true</AutoResolve>
           <AlertPriority>Normal</AlertPriority>
@@ -29,31 +29,31 @@
   </Monitoring>
   <Presentation>
     <StringResources>
-      <StringResource ID="F12.Aibi.UnitMonitor.Service.BusinessHours.Aibi.AlertMessage" />
+      <StringResource ID="F12.Payments.UnitMonitor.Service.BusinessHours.Aibi.AlertMessage" />
     </StringResources>
   </Presentation>
   <LanguagePacks>
     <LanguagePack ID="ENU" IsDefault="true">
       <DisplayStrings>
-        <DisplayString ElementID="F12.Aibi.UnitMonitor.Service.BusinessHours.Aibi">
+        <DisplayString ElementID="F12.Payments.UnitMonitor.Service.BusinessHours.Aibi">
           <Name>Aibi Monitor</Name>
           <Description>Description for the new unit monitor.</Description>
         </DisplayString>
-        <DisplayString ElementID="F12.Aibi.UnitMonitor.Service.BusinessHours.Aibi.AlertMessage">
+        <DisplayString ElementID="F12.Payments.UnitMonitor.Service.BusinessHours.Aibi.AlertMessage">
           <Name>Aibi Service is Not Running - Examples Simple Monitors</Name>
           <Description>The Aibi Service is not running on {0}</Description>
         </DisplayString>
-        <DisplayString ElementID="F12.Aibi.UnitMonitor.Service.BusinessHours.Aibi" SubElementID="Running">
+        <DisplayString ElementID="F12.Payments.UnitMonitor.Service.BusinessHours.Aibi" SubElementID="Running">
           <Name>Running</Name>
           <Description>Running</Description>
         </DisplayString>
-        <DisplayString ElementID="F12.Aibi.UnitMonitor.Service.BusinessHours.Aibi" SubElementID="NotRunning">
+        <DisplayString ElementID="F12.Payments.UnitMonitor.Service.BusinessHours.Aibi" SubElementID="NotRunning">
           <Name>NotRunning</Name>
           <Description>NotRunning</Description>
         </DisplayString>
       </DisplayStrings>
       <KnowledgeArticles>
-        <KnowledgeArticle ElementID="F12.Aibi.UnitMonitor.Service.BusinessHours.Aibi" Visible="true">
+        <KnowledgeArticle ElementID="F12.Payments.UnitMonitor.Service.BusinessHours.Aibi" Visible="true">
           <MamlContent>
             <maml:section xmlns:maml="http://schemas.microsoft.com/maml/2004/10">
               <maml:title>Summary</maml:title>
