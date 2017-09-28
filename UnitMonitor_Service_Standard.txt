@@ -1,6 +1,6 @@
 <Monitoring>
     <Monitors>
-      <UnitMonitor ID="F12.Payments.UnitMonitor.Service.Spooler" Accessibility="Public" Enabled="false" Target="F12.Payments.AppServer" ParentMonitorID="Health!System.Health.AvailabilityState" Remotable="true" Priority="Normal" TypeID="Windows!Microsoft.Windows.CheckNTServiceStateMonitorType" ConfirmDelivery="false">
+      <UnitMonitor ID="F12.Payments.UnitMonitor.Service.Spooler" Accessibility="Public" Enabled="true" Target="F12.Payments.AppServer" ParentMonitorID="Health!System.Health.AvailabilityState" Remotable="true" Priority="Normal" TypeID="Windows!Microsoft.Windows.CheckNTServiceStateMonitorType" ConfirmDelivery="false">
         <Category>AvailabilityHealth</Category>
         <AlertSettings AlertMessage="F12.Payments.UnitMonitor.Service.Spooler.AlertMessage">
           <AlertOnState>Error</AlertOnState>
