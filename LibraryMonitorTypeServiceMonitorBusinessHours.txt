@@ -1,0 +1,186 @@
+<TypeDefinitions>
+  <MonitorTypes>
+  <UnitMonitorType ID="Microsoft.Windows.CheckNTServiceStateWithBusinessHoursMonitorType" Accessibility="Public">
+    <MonitorTypeStates>
+      <MonitorTypeState ID="Running" />
+      <MonitorTypeState ID="NotRunning" />
+    </MonitorTypeStates>
+    <Configuration>
+      <xsd:element name="ComputerName" type="xsd:string" />
+      <xsd:element name="ServiceName" type="xsd:string" />
+      <xsd:element name="CheckStartupType" minOccurs="0" maxOccurs="1" type="xsd:string" />
+      <xsd:element name="From" type="xsd:string"/>
+      <xsd:element name="To" type="xsd:string"/>
+      <xsd:element name="Days" type="xsd:int"/>
+    </Configuration>
+    <OverrideableParameters>
+      <OverrideableParameter ID="CheckStartupType" Selector="$Config/CheckStartupType$" ParameterType="string" />
+      <OverrideableParameter ID="From" Selector="$Config/From$" ParameterType="string" />
+      <OverrideableParameter ID="To" Selector="$Config/To$" ParameterType="string" />
+      <OverrideableParameter ID="Days" Selector="$Config/Days$" ParameterType="int" />
+    </OverrideableParameters>
+    <MonitorImplementation>
+      <MemberModules>
+        <DataSource ID="DS" TypeID="Windows!Microsoft.Windows.Win32ServiceInformationProvider">
+          <ComputerName>$Config/ComputerName$</ComputerName>
+          <ServiceName>$Config/ServiceName$</ServiceName>
+          <Frequency>30</Frequency>
+          <CheckStartupType>$Config/CheckStartupType$</CheckStartupType>
+        </DataSource>
+        <ProbeAction ID="Probe" TypeID="Windows!Microsoft.Windows.Win32ServiceInformationProbe">
+          <ComputerName>$Config/ComputerName$</ComputerName>
+          <ServiceName>$Config/ServiceName$</ServiceName>
+        </ProbeAction>
+        <ConditionDetection ID="ServiceRunning" TypeID="System!System.ExpressionFilter">
+          <Expression>
+            <Or>
+              <Expression>
+                <And>
+                  <Expression>
+                    <SimpleExpression>
+                      <ValueExpression>
+                        <Value Type="String">$Config/CheckStartupType$</Value>
+                      </ValueExpression>
+                      <Operator>NotEqual</Operator>
+                      <ValueExpression>
+                        <Value Type="String">false</Value>
+                      </ValueExpression>
+                    </SimpleExpression>
+                  </Expression>
+                  <Expression>
+                    <SimpleExpression>
+                      <ValueExpression>
+                        <XPathQuery Type="Integer">Property[@Name='StartMode']</XPathQuery>
+                      </ValueExpression>
+                      <Operator>NotEqual</Operator>
+                      <ValueExpression>
+                        <Value Type="Integer">2</Value>
+                      </ValueExpression>
+                    </SimpleExpression>
+                  </Expression>
+                </And>
+              </Expression>
+              <Expression>
+                <SimpleExpression>
+                  <ValueExpression>
+                    <XPathQuery Type="Integer">Property[@Name='State']</XPathQuery>
+                  </ValueExpression>
+                  <Operator>Equal</Operator>
+                  <ValueExpression>
+                    <Value Type="Integer">4</Value>
+                  </ValueExpression>
+                </SimpleExpression>
+              </Expression>
+            </Or>
+          </Expression>
+        </ConditionDetection>
+        <ConditionDetection ID="ServiceNotRunning" TypeID="System!System.ExpressionFilter">
+          <Expression>
+            <And>
+              <Expression>
+                <Or>
+                  <Expression>
+                    <SimpleExpression>
+                      <ValueExpression>
+                        <XPathQuery Type="Integer">Property[@Name='StartMode']</XPathQuery>
+                      </ValueExpression>
+                      <Operator>Equal</Operator>
+                      <ValueExpression>
+                        <Value Type="Integer">2</Value>
+                      </ValueExpression>
+                    </SimpleExpression>
+                  </Expression>
+                  <Expression>
+                    <And>
+                      <Expression>
+                        <SimpleExpression>
+                          <ValueExpression>
+                            <Value Type="String">$Config/CheckStartupType$</Value>
+                          </ValueExpression>
+                          <Operator>Equal</Operator>
+                          <ValueExpression>
+                            <Value Type="String">false</Value>
+                          </ValueExpression>
+                        </SimpleExpression>
+                      </Expression>
+                      <Expression>
+                        <SimpleExpression>
+                          <ValueExpression>
+                            <XPathQuery Type="Integer">Property[@Name='StartMode']</XPathQuery>
+                          </ValueExpression>
+                          <Operator>NotEqual</Operator>
+                          <ValueExpression>
+                            <Value Type="Integer">2</Value>
+                          </ValueExpression>
+                        </SimpleExpression>
+                      </Expression>
+                    </And>
+                  </Expression>
+                </Or>
+              </Expression>
+              <Expression>
+                <SimpleExpression>
+                  <ValueExpression>
+                    <XPathQuery Type="Integer">Property[@Name='State']</XPathQuery>
+                  </ValueExpression>
+                  <Operator>NotEqual</Operator>
+                  <ValueExpression>
+                    <Value Type="Integer">4</Value>
+                  </ValueExpression>
+                </SimpleExpression>
+              </Expression>
+            </And>
+          </Expression>
+          <SuppressionSettings>
+            <MatchCount>2</MatchCount>
+          </SuppressionSettings>
+        </ConditionDetection>
+        <ConditionDetection ID="Filter" TypeID="System!System.SchedulerFilter">
+          <SchedulerFilter>
+            <ProcessDataMode>OnSchedule</ProcessDataMode>
+            <Schedule>
+              <WeeklySchedule>
+                <Windows>
+                  <Daily>
+                    <Start>$Config/From$</Start>
+                    <End>$Config/To$</End>
+                    <DaysOfWeekMask>$Config/Days$</DaysOfWeekMask>
+                  </Daily>
+                </Windows>
+              </WeeklySchedule>
+              <ExcludeDates />
+            </Schedule>
+            <UseCurrentTime>true</UseCurrentTime>
+        </SchedulerFilter>
+        </ConditionDetection>
+      </MemberModules>
+      <RegularDetections>
+        <RegularDetection MonitorTypeStateID="Running">
+          <Node ID="ServiceRunning">
+            <Node ID="DS" />
+          </Node>
+        </RegularDetection>
+        <RegularDetection MonitorTypeStateID="NotRunning">
+          <Node ID="ServiceNotRunning">
+            <Node ID="Filter">
+              <Node ID="DS" />
+            </Node>
+          </Node>
+        </RegularDetection>
+      </RegularDetections>
+      <OnDemandDetections>
+        <OnDemandDetection MonitorTypeStateID="Running">
+          <Node ID="ServiceRunning">
+            <Node ID="Probe" />
+          </Node>
+        </OnDemandDetection>
+        <OnDemandDetection MonitorTypeStateID="NotRunning">
+          <Node ID="ServiceNotRunning">
+            <Node ID="Probe" />
+          </Node>
+        </OnDemandDetection>
+      </OnDemandDetections>
+    </MonitorImplementation>
+  </UnitMonitorType>
+  </MonitorTypes>
+    </TypeDefinitions>
