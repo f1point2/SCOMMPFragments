@@ -1,0 +1,52 @@
+<Monitoring>
+    <Monitors>
+      <UnitMonitor ID="F12.Payments.UnitMonitor.Service.Spooler" Accessibility="Public" Enabled="false" Target="F12.Payments.AppServer" ParentMonitorID="Health!System.Health.AvailabilityState" Remotable="true" Priority="Normal" TypeID="Windows!Microsoft.Windows.CheckNTServiceStateMonitorType" ConfirmDelivery="false">
+        <Category>AvailabilityHealth</Category>
+        <AlertSettings AlertMessage="F12.Payments.UnitMonitor.Service.Spooler.AlertMessage">
+          <AlertOnState>Error</AlertOnState>
+          <AutoResolve>true</AutoResolve>
+          <AlertPriority>Normal</AlertPriority>
+          <AlertSeverity>MatchMonitorHealth</AlertSeverity>
+          <AlertParameters>
+            <AlertParameter1>$Target/Host/Property[Type='Windows!Microsoft.Windows.Computer']/PrincipalName$</AlertParameter1>
+          </AlertParameters>
+        </AlertSettings>
+        <OperationalStates>
+          <OperationalState ID="Running" MonitorTypeStateID="Running" HealthState="Success" />
+          <OperationalState ID="NotRunning" MonitorTypeStateID="NotRunning" HealthState="Error" />
+        </OperationalStates>
+        <Configuration>
+          <ComputerName>$Target/Host/Property[Type='Windows!Microsoft.Windows.Computer']/PrincipalName$</ComputerName>
+          <ServiceName>Spooler</ServiceName>
+          <CheckStartupType>False</CheckStartupType>
+        </Configuration>
+      </UnitMonitor>
+    </Monitors>
+  </Monitoring>
+  <Presentation>
+    <StringResources>
+      <StringResource ID="F12.Payments.UnitMonitor.Service.Spooler.AlertMessage" />
+    </StringResources>
+  </Presentation>
+  <LanguagePacks>
+    <LanguagePack ID="ENU" IsDefault="true">
+      <DisplayStrings>
+        <DisplayString ElementID="F12.Payments.UnitMonitor.Service.Spooler">
+          <Name>Spooler Monitor</Name>
+          <Description>Description for the new unit monitor.</Description>
+        </DisplayString>
+        <DisplayString ElementID="F12.Payments.UnitMonitor.Service.Spooler.AlertMessage">
+          <Name>Spooler Service is Not Running - Examples Simple Monitors</Name>
+          <Description>The Spooler Service is not running on {0}</Description>
+        </DisplayString>
+        <DisplayString ElementID="F12.Payments.UnitMonitor.Service.Spooler" SubElementID="Running">
+          <Name>Running</Name>
+          <Description>Running</Description>
+        </DisplayString>
+        <DisplayString ElementID="F12.Payments.UnitMonitor.Service.Spooler" SubElementID="NotRunning">
+          <Name>NotRunning</Name>
+          <Description>NotRunning</Description>
+        </DisplayString>
+      </DisplayStrings>
+    </LanguagePack>
+  </LanguagePacks>
