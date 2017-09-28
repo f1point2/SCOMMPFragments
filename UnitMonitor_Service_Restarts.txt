@@ -1,0 +1,169 @@
+  <Monitoring>
+    <Rules>
+      <Rule ID="F12.Aibi.Rule.NTEvent.Service.WithRestart.Aibi" Target="F12.Aibi.AppServer" Enabled="true" ConfirmDelivery="false" Remotable="true" Priority="Normal" DiscardLevel="100">
+        <Category>Alert</Category>
+        <DataSources>
+          <DataSource ID="DS" TypeID="Windows!Microsoft.Windows.EventProvider">
+            <ComputerName>$Target/Host/Property[Type="Windows!Microsoft.Windows.Computer"]/PrincipalName$</ComputerName>
+            <LogName>Application</LogName>
+            <Expression>
+              <And>
+                <Expression>
+                  <SimpleExpression>
+                    <ValueExpression>
+                      <XPathQuery Type="UnsignedInteger">EventDisplayNumber</XPathQuery>
+                    </ValueExpression>
+                    <Operator>Equal</Operator>
+                    <ValueExpression>
+                      <Value Type="UnsignedInteger">3002</Value>
+                    </ValueExpression>
+                  </SimpleExpression>
+                </Expression>
+                <Expression>
+                  <SimpleExpression>
+                    <ValueExpression>
+                      <XPathQuery Type="String">PublisherName</XPathQuery>
+                    </ValueExpression>
+                    <Operator>Equal</Operator>
+                    <ValueExpression>
+                      <Value Type="String">Aibi Service Restart Script</Value>
+                    </ValueExpression>
+                  </SimpleExpression>
+                </Expression>
+              </And>
+            </Expression>
+          </DataSource>
+        </DataSources>
+        <WriteActions>
+          <WriteAction ID="Alert" TypeID="Health!System.Health.GenerateAlert">
+            <Priority>1</Priority>
+            <Severity>2</Severity>
+            <AlertMessageId>$MPElement[Name="F12.Aibi.Rule.NTEvent.Service.WithRestart.Aibi.AlertMessage"]$</AlertMessageId>
+            <AlertParameters>
+              <AlertParameter1>$Target/Host/Property[Type='Windows!Microsoft.Windows.Computer']/PrincipalName$</AlertParameter1>
+            </AlertParameters>
+          </WriteAction>
+        </WriteActions>
+      </Rule>
+    </Rules>
+    <Monitors>
+      <UnitMonitor ID="F12.Aibi.UnitMonitor.Service.WithRestart.Aibi" Accessibility="Public" Enabled="true" Target="F12.Aibi.AppServer" ParentMonitorID="Health!System.Health.AvailabilityState" Remotable="true" Priority="Normal" TypeID="Windows!Microsoft.Windows.CheckNTServiceStateMonitorType" ConfirmDelivery="false">
+        <Category>AvailabilityHealth</Category>
+        <OperationalStates>
+          <OperationalState ID="Running" MonitorTypeStateID="Running" HealthState="Success" />
+          <OperationalState ID="NotRunning" MonitorTypeStateID="NotRunning" HealthState="Error" />
+        </OperationalStates>
+        <Configuration>
+          <ComputerName>$Target/Host/Property[Type='Windows!Microsoft.Windows.Computer']/PrincipalName$</ComputerName>
+          <ServiceName>Aibi</ServiceName>
+          <CheckStartupType>False</CheckStartupType>
+        </Configuration>
+      </UnitMonitor>
+    </Monitors>
+    <Recoveries>
+      <Recovery ID="F12.Aibi.AppServer.UnitMonitor.Service.WithRestart.Recovery.Aibi" Accessibility="Public" Enabled="true" Target="F12.Aibi.AppServer" Monitor="F12.Aibi.UnitMonitor.Service.WithRestart.Aibi" ResetMonitor="true" ExecuteOnState="Error" Remotable="true" Timeout="300">
+        <Category>Maintenance</Category>
+        <WriteAction ID="ServiceRestartScriptWriteAction" TypeID="Windows!Microsoft.Windows.PowerShellWriteAction">
+          <ScriptName>ServiceRestart.ps1$</ScriptName>
+          <ScriptBody>
+            <![CDATA[# Number of minutes to back check service starts
+  $Minutes = 15
+  # Number of events to back check service starts
+  $Events = 3
+  # Check if event log source exists
+  if ([System.Diagnostics.EventLog]::SourceExists("Aibi Service Restart Script") -eq $false)
+        {
+              # Create event log source if required
+        New-EventLog -LogName Application -Source "Aibi Service Restart Script"
+              
+        }
+       # Check Aibi Service has a StartMode of Auto
+       if ((Get-WmiObject -Class Win32_Service -Property StartMode -Filter "Name='Aibi'").StartMode -eq 'Auto' ) 
+    {
+           # Check if service has been started more than configured values for $Minutes and $Events above
+           if ((Get-EventLog -LogName Application -source "Aibi Service Restart Script" -instanceid 3001 -After (Get-Date).AddMinutes(-$Minutes) -erroraction 'silentlycontinue').count -le $Events) 
+              {
+                     # Check if the Aibi service is already running, if it is, stop it
+                     #if((get-service Aibi).status -eq 'running') {Stop-Service Aibi} 
+                     #Start monitored service and log info
+                     Start-Service Aibi
+                     Write-EventLog -LogName Application -Source "Aibi Service Restart Script" -EntryType Information -EventId 3001 -Message "Aibi Service start attempted" 
+                     #Write-Host will be shown in Recovery Output
+                     Write-Host "Service start attempted"
+              }
+              # Else service has already been restarted $Events times within $Minutes therefore restart is not working, log 'critical failure'
+              else
+              {
+                     # Don't start service and log error
+                     Write-EventLog -LogName Application -Source "Aibi Service Restart Script" -EntryType Error -EventId 3002 -Message "Service start not attempted service as it has failed more than $Events times in the last $Minutes Minutes" 
+                     Write-Host "Service start not attempted service has failed more than $Events times in the last $Minutes Minutes"
+              }
+       } 
+       #Otherwise, if the Aibi service is not set to Auto start, assume it has been taken down for maintenance and log, but take no action
+    else
+    {
+       # Don't start service and log info
+    Write-EventLog -LogName Application -Source "Aibi Service Restart Script" -EntryType Information -EventId 2001 -Message "Service not started because the Aibi service is down for maintenance. Log, but take no action" 
+    Write-Host "Aibi Service Set to Manual or Disabled"
+
+       }
+]]>
+          </ScriptBody>
+          <TimeoutSeconds>300</TimeoutSeconds>
+        </WriteAction>
+      </Recovery>
+    </Recoveries>
+  </Monitoring>
+  <Presentation>
+    <StringResources>
+      <StringResource ID="F12.Aibi.Rule.NTEvent.Service.WithRestart.Aibi.AlertMessage" />
+    </StringResources>
+  </Presentation>
+  <LanguagePacks>
+    <LanguagePack ID="ENU" IsDefault="true">
+      <DisplayStrings>
+        <DisplayString ElementID="F12.Aibi.UnitMonitor.Service.WithRestart.Aibi">
+          <Name>Aibi Service Monitor</Name>
+          <Description>Description for the new unit monitor.</Description>
+        </DisplayString>
+        <DisplayString ElementID="F12.Aibi.UnitMonitor.Service.WithRestart.Aibi" SubElementID="Running">
+          <Name>Running</Name>
+          <Description>Running</Description>
+        </DisplayString>
+        <DisplayString ElementID="F12.Aibi.UnitMonitor.Service.WithRestart.Aibi" SubElementID="NotRunning">
+          <Name>NotRunning</Name>
+          <Description>NotRunning</Description>
+        </DisplayString>
+        <DisplayString ElementID="F12.Aibi.Rule.NTEvent.Service.WithRestart.Aibi">
+          <Name>Aibi Service has not been started after consecutive restarts</Name>
+          <Description>Description for the new alert rule.</Description>
+        </DisplayString>
+        <DisplayString ElementID="F12.Aibi.Rule.NTEvent.Service.WithRestart.Aibi.AlertMessage">
+          <Name>Aibi Service has not been started after consecutive failures</Name>
+          <Description>Aibi Service has not been restarted after consecutive restart failures on {0}</Description>
+        </DisplayString>
+      </DisplayStrings>
+      <KnowledgeArticles>
+        <KnowledgeArticle ElementID="F12.Aibi.UnitMonitor.Service.WithRestart.Aibi" Visible="true">
+          <MamlContent>
+            <maml:section xmlns:maml="http://schemas.microsoft.com/maml/2004/10">
+              <maml:title>Summary</maml:title>
+              <maml:para>Monitors the status of the Lake Aibi Service during specified business hours.</maml:para>
+            </maml:section>
+            <maml:section xmlns:maml="http://schemas.microsoft.com/maml/2004/10">
+              <maml:title>Causes</maml:title>
+              <maml:para>The service stops when it is overwhelmed with work.</maml:para>
+            </maml:section>
+            <maml:section xmlns:maml="http://schemas.microsoft.com/maml/2004/10">
+              <maml:title>Resolutions</maml:title>
+              <maml:para>The monitor triggers a recovery script that checks how often the service has restarted (the default is 3 times in the last 15 minutes) - it uses event 3001 for this.</maml:para>
+              <maml:para>If the service has not restarted 3 times in the last 15 minutes then the service is restarted and event 3001 is dropped into the Windows Application Log</maml:para>
+              <maml:para>If the service has restarted 3 times in the last 15 minutes then the service is not restarted. Instead, event 3002 is dropped into the Windows Application Log </maml:para>
+              <maml:para>The monitor does not generate an alert</maml:para>
+              <maml:para>The rule generates the alert and must be manually closed</maml:para>
+            </maml:section>
+          </MamlContent>
+        </KnowledgeArticle>
+      </KnowledgeArticles>
+    </LanguagePack>
+  </LanguagePacks>
