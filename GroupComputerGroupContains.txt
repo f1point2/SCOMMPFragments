@@ -21,7 +21,7 @@
               <RelationshipClass>$MPElement[Name="SC!Microsoft.SystemCenter.ComputerGroupContainsComputer"]$</RelationshipClass>
               <Expression>
                 <Contains maxDepth="1">
-                  <MonitoringClass>$MPElement[Name="F12.Payments.ApplicationServer"]$</MonitoringClass>
+                  <MonitoringClass>$MPElement[Name="F12.Payments.AppServer"]$</MonitoringClass>
                 </Contains>
               </Expression>
             </MembershipRule>

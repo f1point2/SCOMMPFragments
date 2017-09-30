@@ -1,0 +1,55 @@
+<TypeDefinitions>
+        <EntityTypes>
+      <ClassTypes>
+        <ClassType ID="F12.Payments.InstanceGroup.AppServer.BasedOnProperty" Base="MSIL!Microsoft.SystemCenter.InstanceGroup" Abstract="false" Accessibility="Public" Hosted="false" Singleton="true" />
+      </ClassTypes>
+    </EntityTypes>
+  </TypeDefinitions>
+  <Monitoring>
+    <Discoveries>
+      <Discovery ID="F12.Payments.InstanceGroup.AppServer.BasedOnProperty.Discovery" Target="F12.Payments.InstanceGroup.AppServer.BasedOnProperty" Enabled="true" ConfirmDelivery="false" Priority="Normal" Remotable="true">
+        <Category>Discovery</Category>
+        <DiscoveryTypes>
+          <DiscoveryRelationship TypeID="MSIL!Microsoft.SystemCenter.InstanceGroupContainsEntities" />
+        </DiscoveryTypes>
+        <DataSource ID="DS" TypeID="SC!Microsoft.SystemCenter.GroupPopulator">
+          <RuleId>$MPElement$</RuleId>
+          <GroupInstanceId>$Target/Id$</GroupInstanceId>
+          <MembershipRules>
+            <MembershipRule>
+              <MonitoringClass>$MPElement[Name="F12.Payments.AppServer"]$</MonitoringClass>
+              <RelationshipClass>$MPElement[Name="MSIL!Microsoft.SystemCenter.InstanceGroupContainsEntities"]$</RelationshipClass>
+              <Expression>
+                <SimpleExpression>
+                  <ValueExpression>
+                    <Property>$MPElement[Name="F12.Payments.AppServer"]/Version$</Property>
+                  </ValueExpression>
+                  <!-- Case Sensitive - Like, NotLike, Equal, NotEqual, Greater, Less, GreaterEqual, LessEqual-->
+                  <Operator>Equal</Operator>
+                  <ValueExpression>
+                    <!-- Use Value when using either static values of $Config or $Target parameters. Use XPathQuery when comparing output from a previous module-->
+                    <Value>1.2.3</Value>
+                    <!-- Value Types are Boolean, Integer, UnsignedInteger, Double, Duration, DateTime, String -->
+                  </ValueExpression>
+                </SimpleExpression>
+              </Expression>
+            </MembershipRule>
+          </MembershipRules>
+        </DataSource>
+      </Discovery>
+    </Discoveries>
+  </Monitoring>
+  <LanguagePacks>
+    <LanguagePack ID="ENU" IsDefault="true">
+      <DisplayStrings>
+        <DisplayString ElementID="F12.Payments.InstanceGroup.AppServer.BasedOnProperty.Discovery">
+          <Name>Discovery F12 Payments Instance Group based on property</Name>
+          <Description>Description for the new discovery.</Description>
+        </DisplayString>
+        <DisplayString ElementID="F12.Payments.InstanceGroup.AppServer.BasedOnProperty">
+          <Name>F12 Payments - Instance Group based on property</Name>
+          <Description>Description for the new discovery.</Description>
+        </DisplayString>
+      </DisplayStrings>
+    </LanguagePack>
+  </LanguagePacks>

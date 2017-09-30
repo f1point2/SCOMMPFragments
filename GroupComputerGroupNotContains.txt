@@ -34,7 +34,7 @@
     <LanguagePack ID="ENU" IsDefault="true">
       <DisplayStrings>
         <DisplayString ElementID="F12.Payments.ComputerGroup.NotContained">
-          <Name>Discover F12 Payments - Not Contained Computer Group</Name>
+          <Name>F12 Payments - Not Contained Computer Group</Name>
           <Description>Description for the new discovery.</Description>
         </DisplayString>
         <DisplayString ElementID="F12.Payments.ComputerGroup.NotContained.Discovery">
