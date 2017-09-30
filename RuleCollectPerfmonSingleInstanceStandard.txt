@@ -1,0 +1,34 @@
+ <Monitoring>
+    <Rules>
+      <Rule ID="F12.Payments.Rule.Collect.Perfmon.WorkflowCount" Target="F12.Payments.AppServer" Enabled="true" ConfirmDelivery="false" Remotable="true" Priority="Normal" DiscardLevel="100">
+        <Category>PerformanceCollection</Category>
+        <DataSources>
+          <DataSource ID="DS" TypeID="Perf!System.Performance.OptimizedDataProvider">
+            <ComputerName>$Target/Host/Property[Type="Windows!Microsoft.Windows.Computer"]/PrincipalName$</ComputerName>
+            <CounterName>Workflow Count</CounterName>
+            <ObjectName>Health Service</ObjectName>
+            <InstanceName></InstanceName>
+            <AllInstances>false</AllInstances>
+            <Frequency>300</Frequency>
+            <Tolerance>10</Tolerance>
+            <ToleranceType>Absolute</ToleranceType>
+            <MaximumSampleSeparation>5</MaximumSampleSeparation>
+          </DataSource>
+        </DataSources>
+        <WriteActions>
+          <WriteAction ID="CollectToDB" TypeID="SC!Microsoft.SystemCenter.CollectPerformanceData" />
+          <WriteAction ID="CollectToDW" TypeID="MSDL!Microsoft.SystemCenter.DataWarehouse.PublishPerformanceData" />
+        </WriteActions>
+      </Rule>
+    </Rules>
+  </Monitoring>
+  <LanguagePacks>
+    <LanguagePack ID="ENU" IsDefault="true">
+      <DisplayStrings>
+        <DisplayString ElementID="F12.Payments.Rule.Collect.Perfmon.WorkflowCount">
+          <Name>F12 Payments - Health Service - Workflow Count</Name>
+          <Description>Description for the new performance collection rule.</Description>
+        </DisplayString>
+      </DisplayStrings>
+    </LanguagePack>
+  </LanguagePacks>

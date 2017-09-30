@@ -1,0 +1,46 @@
+<TypeDefinitions>
+    <EntityTypes>
+      <ClassTypes>
+        <ClassType ID="F12.Payments.ComputerGroup" Base="SC!Microsoft.SystemCenter.ComputerGroup" Abstract="false" Accessibility="Public" Hosted="false" Singleton="true" />
+     </ClassTypes>
+    </EntityTypes>
+  </TypeDefinitions>
+  <Monitoring>
+    <Discoveries>
+      <Discovery ID="F12.Payments.ComputerGroup.Discovery" Target="F12.Payments.ComputerGroup" Enabled="true" ConfirmDelivery="false" Priority="Normal" Remotable="true">
+        <Category>Discovery</Category>
+        <DiscoveryTypes>
+          <DiscoveryRelationship TypeID="SC!Microsoft.SystemCenter.ComputerGroupContainsComputer" />
+        </DiscoveryTypes>
+        <DataSource ID="DS" TypeID="SC!Microsoft.SystemCenter.GroupPopulator">
+          <RuleId>$MPElement$</RuleId>
+          <GroupInstanceId>$Target/Id$</GroupInstanceId>
+          <MembershipRules>
+            <MembershipRule>
+              <MonitoringClass>$MPElement[Name="Windows!Microsoft.Windows.Computer"]$</MonitoringClass>
+              <RelationshipClass>$MPElement[Name="SC!Microsoft.SystemCenter.ComputerGroupContainsComputer"]$</RelationshipClass>
+              <Expression>
+                <Contains maxDepth="1">
+                  <MonitoringClass>$MPElement[Name="F12.Payments.ApplicationServer"]$</MonitoringClass>
+                </Contains>
+              </Expression>
+            </MembershipRule>
+          </MembershipRules>
+        </DataSource>
+      </Discovery>
+    </Discoveries>
+  </Monitoring>
+  <LanguagePacks>
+    <LanguagePack ID="ENU" IsDefault="true">
+      <DisplayStrings>
+        <DisplayString ElementID="F12.Payments.ComputerGroup">
+          <Name>F12 Payments - Computer Group</Name>
+          <Description>Description for the new discovery.</Description>
+        </DisplayString>
+        <DisplayString ElementID="F12.Payments.ComputerGroup.Discovery">
+          <Name>Discover F12 Payments - Computer Group</Name>
+          <Description>Description for the new discovery.</Description>
+        </DisplayString>
+      </DisplayStrings>
+    </LanguagePack>
+  </LanguagePacks>

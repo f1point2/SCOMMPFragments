@@ -2,7 +2,7 @@
     <Monitors>
       <UnitMonitor ID="F12.Payments.UnitMonitor.Performance.2State.Standard.ModuleCount" Accessibility="Public" Enabled="true" Target="F12.Payments.AppServer" ParentMonitorID="Health!System.Health.PerformanceState" Remotable="true" Priority="Normal" TypeID="Perf!System.Performance.ConsecutiveSamplesThreshold" ConfirmDelivery="false">
         <Category>PerformanceHealth</Category>
-        <AlertSettings AlertMessage="F12.Payments.UnitMonitor.Performance.2State.Standard.ModuleCount">
+        <AlertSettings AlertMessage="F12.Payments.UnitMonitor.Performance.2State.Standard.ModuleCount.AlertMessage">
           <AlertOnState>Error</AlertOnState>
           <AutoResolve>true</AutoResolve>
           <AlertPriority>Normal</AlertPriority>
@@ -49,7 +49,8 @@
         <DisplayString ElementID="F12.Payments.UnitMonitor.Performance.2State.Standard.ModuleCount.AlertMessage">
           <Name>Example Monitors - Module Count</Name>
           <Description>Performance Counter over threshold for {0} consecutive occurrences. 
-			Last value = {1} Instance {2}
+			Last value = {1} 
+	    Instance =   {2}
             Object =     {3}
             Counter =    {4}
             At time =    {5}</Description>

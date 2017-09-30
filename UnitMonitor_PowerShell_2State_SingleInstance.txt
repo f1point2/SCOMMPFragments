@@ -1,0 +1,267 @@
+ <!-- Find \ Replace ScriptName.ps1 -->
+
+  <TypeDefinitions>
+    <ModuleTypes>
+      <DataSourceModuleType ID="DS" Accessibility="Internal" Batching="false">
+        <Configuration>
+          <xsd:element minOccurs="1" name="IntervalSeconds" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element minOccurs="0" name="SyncTime" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element minOccurs="1" name="ThresholdValue" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+        </Configuration>
+        <OverrideableParameters>
+          <OverrideableParameter ID="IntervalSeconds" Selector="$Config/IntervalSeconds$" ParameterType="int" />
+          <OverrideableParameter ID="SyncTime" Selector="$Config/SyncTime$" ParameterType="string" />
+          <OverrideableParameter ID="ThresholdValue" Selector="$Config/ThresholdValue$" ParameterType="int" />
+        </OverrideableParameters>
+        <ModuleImplementation Isolation="Any">
+          <Composite>
+            <MemberModules>
+              <DataSource ID="Schedule" TypeID="System!System.SimpleScheduler">
+                <IntervalSeconds>$Config/IntervalSeconds$</IntervalSeconds>
+                <SyncTime>$Config/SyncTime$</SyncTime>
+              </DataSource>
+              <ProbeAction ID="Probe" TypeID="Probe.PowerShell.2State">
+                <ThresholdValue>$Config/ThresholdValue$</ThresholdValue>
+              </ProbeAction>
+            </MemberModules>
+            <Composition>
+              <Node ID="Probe">
+                <Node ID="Schedule" />
+              </Node>
+            </Composition>
+          </Composite>
+        </ModuleImplementation>
+        <OutputType>System!System.PropertyBagData</OutputType>
+      </DataSourceModuleType>
+      <ProbeActionModuleType ID="Probe.PowerShell.2State" Accessibility="Internal" Batching="false" PassThrough="false">
+        <Configuration>
+          <xsd:element minOccurs="1" name="ThresholdValue" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+        </Configuration>
+        <ModuleImplementation Isolation="Any">
+          <Composite>
+            <MemberModules>
+              <ProbeAction ID="PSScript" TypeID="Windows!Microsoft.Windows.PowerShellPropertyBagProbe">
+                <ScriptName>RunPowerShellScript.ps1</ScriptName>
+                <ScriptBody>
+                  <![CDATA[param
+(
+    [Int]$ThresholdValue
+)
+
+#In general, do not pass thresholds into scripts. Do not do condition detection in the script. Can pass threshold out as Property Bag to include in description 
+
+$testSuccessful = $true
+
+$api = new-object -comObject 'MOM.ScriptAPI'
+$api.LogScriptEvent('ScriptName.ps1',20,4,$ThresholdValue)
+$bag = $api.CreatePropertyBag()
+$bag.AddValue('ThresholdDays',$ThresholdValue)
+
+# To return all certificate stores. 
+# $ExpiringCerts = @(Get-ChildItem -Path Cert: -Recurse | where { $_.notafter -le (get-date).AddDays($ThresholdValue) -and $_.notafter -ge (get-date).AddDays(-1) })
+
+# To return just Personal Certificate Store
+$ExpiringCerts = @(Get-ChildItem -Path Cert:\LocalMachine\My | where { $_.notafter -le (get-date).AddDays($ThresholdValue) -and $_.notafter -ge (get-date).AddDays(-1) })
+
+If ($ExpiringCerts.Count -gt 0)
+{
+
+$testSuccessful = $false
+$api.LogScriptEvent('ScriptName.ps1',20,4,$ExpiringCerts.Count)
+
+$NumCerts = $ExpiringCerts.Count  
+$Desc = "There are $NumCerts certificates due to expire in the next $ThresholdValue Days. These are $ExpiringCerts"
+
+}
+
+if ($testSuccessful -eq $true)
+{ 
+$bag.AddValue('Result','Good')
+$bag.AddValue('ExpiringCertificates','None')
+
+}
+
+ 
+else
+{
+
+$api.LogScriptEvent('ScriptName.ps1',20,4,$Desc)
+
+$bag.AddValue('Result','Bad')
+$bag.AddValue('ExpiringCertificates',$Desc)
+
+}
+
+$bag
+
+
+]]>
+                </ScriptBody>
+                <Parameters>
+                  <Parameter>
+                    <Name>ThresholdValue</Name>
+                    <Value>$Config/ThresholdValue$</Value>
+                  </Parameter>
+                </Parameters>
+                <TimeoutSeconds>300</TimeoutSeconds>
+              </ProbeAction>
+            </MemberModules>
+            <Composition>
+              <Node ID="PSScript" />
+            </Composition>
+          </Composite>
+        </ModuleImplementation>
+        <OutputType>System!System.PropertyBagData</OutputType>
+        <InputType>System!System.BaseData</InputType>
+      </ProbeActionModuleType>
+    </ModuleTypes>
+    <MonitorTypes>
+      <UnitMonitorType ID="ScheduledPowerShellScript.2State.MonitorType" Accessibility="Internal">
+        <MonitorTypeStates>
+          <MonitorTypeState ID="Success" NoDetection="false" />
+          <MonitorTypeState ID="Failure" NoDetection="false" />
+        </MonitorTypeStates>
+        <Configuration>
+          <xsd:element minOccurs="1" name="ThresholdValue" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element minOccurs="1" name="IntervalSeconds" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element minOccurs="1" name="SyncTime" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+        </Configuration>
+        <OverrideableParameters>
+          <OverrideableParameter ID="IntervalSeconds" Selector="$Config/IntervalSeconds$" ParameterType="int" />
+          <OverrideableParameter ID="SyncTime" Selector="$Config/SyncTime$" ParameterType="string" />
+          <OverrideableParameter ID="ThresholdValue" Selector="$Config/ThresholdValue$" ParameterType="string" />
+        </OverrideableParameters>
+        <!-- Add the Data Source Module -->
+        <MonitorImplementation>
+          <MemberModules>
+            <DataSource ID="DataSource" TypeID="DS">
+              <IntervalSeconds>$Config/IntervalSeconds$</IntervalSeconds>
+              <SyncTime>$Config/SyncTime$</SyncTime>
+              <ThresholdValue>$Config/ThresholdValue$</ThresholdValue>
+            </DataSource>
+            <!-- Add a Pass Through Probe module to the Monitor Type.  This module takes no parameters but is required for the On Demand detection -->
+            <ProbeAction ID="PassThru" TypeID="System!System.PassThroughProbe" />
+            <!-- Used by On Demand Detection -->
+            <ProbeAction ID="Probe" TypeID="Probe.PowerShell.2State">
+              <ThresholdValue>$Config/ThresholdValue$</ThresholdValue>
+            </ProbeAction>
+            <!-- Condition Detection  -->
+            <ConditionDetection ID="FilterSuccess" TypeID="System!System.ExpressionFilter">
+              <Expression>
+                <SimpleExpression>
+                  <ValueExpression>
+                    <XPathQuery Type="String">Property[@Name='Result']</XPathQuery>
+                  </ValueExpression>
+                  <Operator>Equal</Operator>
+                  <ValueExpression>
+                    <Value Type="String">Good</Value>
+                  </ValueExpression>
+                </SimpleExpression>
+              </Expression>
+            </ConditionDetection>
+            <ConditionDetection ID="FilterFailure" TypeID="System!System.ExpressionFilter">
+              <Expression>
+                <SimpleExpression>
+                  <ValueExpression>
+                    <XPathQuery Type="String">Property[@Name='Result']</XPathQuery>
+                  </ValueExpression>
+                  <Operator>Equal</Operator>
+                  <ValueExpression>
+                    <Value Type="String">Bad</Value>
+                  </ValueExpression>
+                </SimpleExpression>
+              </Expression>
+            </ConditionDetection>
+          </MemberModules>
+          <!-- Add Condition Detection modules to the Monitor Type for each of the health states.-->
+          <!-- These include an expression that defines the criteria based on output from the script.   -->
+          <RegularDetections>
+            <RegularDetection MonitorTypeStateID="Success">
+              <Node ID="FilterSuccess">
+                <Node ID="DataSource" />
+              </Node>
+            </RegularDetection>
+            <RegularDetection MonitorTypeStateID="Failure">
+              <Node ID="FilterFailure">
+                <Node ID="DataSource" />
+              </Node>
+            </RegularDetection>
+          </RegularDetections>
+          <!-- On Demand Detections -->
+          <OnDemandDetections>
+            <OnDemandDetection MonitorTypeStateID="Success">
+              <Node ID="FilterSuccess">
+                <Node ID="Probe">
+                  <Node ID="PassThru" />
+                </Node>
+              </Node>
+            </OnDemandDetection>
+            <OnDemandDetection MonitorTypeStateID="Failure">
+              <Node ID="FilterFailure">
+                <Node ID="Probe">
+                  <Node ID="PassThru" />
+                </Node>
+              </Node>
+            </OnDemandDetection>
+          </OnDemandDetections>
+        </MonitorImplementation>
+      </UnitMonitorType>
+    </MonitorTypes>
+  </TypeDefinitions>
+  <Monitoring>
+    <Monitors>
+      <UnitMonitor ID="F12.Payments.Monitor.Unit.Script.PShell.2State" Accessibility="Public" Enabled="true" Target="F12.Payments.AppServer" ParentMonitorID="Health!System.Health.AvailabilityState" Remotable="true" Priority="Normal" TypeID="ScheduledPowerShellScript.2State.MonitorType" ConfirmDelivery="false">
+        <Category>AvailabilityHealth</Category>
+        <AlertSettings AlertMessage="F12.Payments.Monitor.Unit.Script.PShell.2State.AlertMessage">
+          <AlertOnState>Error</AlertOnState>
+          <AutoResolve>true</AutoResolve>
+          <AlertPriority>Normal</AlertPriority>
+          <AlertSeverity>MatchMonitorHealth</AlertSeverity>
+          <AlertParameters>
+            <AlertParameter1>$Data/Context/Property[@Name='ExpiringCertificates']$</AlertParameter1>
+            <AlertParameter2>$Data/Context/Property[@Name='ThresholdValue']$</AlertParameter2>
+          </AlertParameters>
+        </AlertSettings>
+        <OperationalStates>
+          <OperationalState ID="Success" MonitorTypeStateID="Success" HealthState="Success" />
+          <OperationalState ID="Failure" MonitorTypeStateID="Failure" HealthState="Error" />
+        </OperationalStates>
+        <Configuration>
+          <ThresholdValue>600</ThresholdValue>
+          <IntervalSeconds>600</IntervalSeconds>
+          <SyncTime />
+        </Configuration>
+      </UnitMonitor>
+    </Monitors>
+  </Monitoring>
+  <Presentation>
+    <StringResources>
+      <StringResource ID="F12.Payments.Monitor.Unit.Script.PShell.2State.AlertMessage" />
+    </StringResources>
+  </Presentation>
+  <LanguagePacks>
+    <LanguagePack ID="ENU" IsDefault="true">
+      <DisplayStrings>
+        <DisplayString ElementID="F12.Payments.Monitor.Unit.Script.PShell.2State">
+          <Name>Certificate Expiration Monitor</Name>
+          <Description>Description for the new unit monitor.</Description>
+        </DisplayString>
+        <DisplayString ElementID="F12.Payments.Monitor.Unit.Script.PShell.2State.AlertMessage">
+          <Name>Certificate Expiry Alert</Name>
+          <Description>
+            Expiring Certificates = {0}
+            Threshold Value = {1}
+          </Description>
+        </DisplayString>
+        <DisplayString ElementID="F12.Payments.Monitor.Unit.Script.PShell.2State" SubElementID="Success">
+          <Name>Success</Name>
+          <Description>Success</Description>
+        </DisplayString>
+        <DisplayString ElementID="F12.Payments.Monitor.Unit.Script.PShell.2State" SubElementID="Failure">
+          <Name>Failure</Name>
+          <Description>Failure</Description>
+        </DisplayString>
+      </DisplayStrings>
+      <KnowledgeArticles></KnowledgeArticles>
+    </LanguagePack>
+  </LanguagePacks>
