@@ -1,0 +1,67 @@
+<!-- Reference Microsoft.SQLServer.Generic.Presentation -->  
+<TypeDefinitions>
+    <EntityTypes>
+      <ClassTypes>
+        <ClassType ID="F12.Payments.InstanceGroup.LogicalDisks.Contained.SQL.NotC" Abstract="false" Accessibility="Public" Hosted="false" Singleton="true" Base="MSIL!Microsoft.SystemCenter.InstanceGroup" />
+      </ClassTypes>
+    </EntityTypes>
+  </TypeDefinitions>
+  <Monitoring>
+    <Discoveries>
+      <Discovery ID="F12.Payments.InstanceGroup.LogicalDisks.Contained.SQL.NotC.Discovery" Target="F12.Payments.InstanceGroup.LogicalDisks.Contained.SQL.NotC" Enabled="true" Priority="Normal" Remotable="true">
+        <Category>Discovery</Category>
+        <DiscoveryTypes>
+          <DiscoveryRelationship TypeID="MSIL!Microsoft.SystemCenter.InstanceGroupContainsEntities"/>
+        </DiscoveryTypes>
+        <DataSource ID="DS" TypeID="SC!Microsoft.SystemCenter.GroupPopulator">
+      <RuleId>$MPElement$</RuleId>
+      <GroupInstanceId>$Target/Id$</GroupInstanceId>
+      <MembershipRules>
+        <MembershipRule>
+          <MonitoringClass>$MPElement[Name="WindowsServer!Microsoft.Windows.Server.LogicalDisk"]$</MonitoringClass>
+          <RelationshipClass>$MPElement[Name="MSIL!Microsoft.SystemCenter.InstanceGroupContainsEntities"]$</RelationshipClass>
+          <Expression>
+            <And>
+              <Expression>
+                <SimpleExpression>
+                  <ValueExpression>
+                    <Property>$MPElement[Name="Windows!Microsoft.Windows.LogicalDevice"]/Name$</Property>
+                  </ValueExpression>
+                  <Operator>NotEqual</Operator>
+                  <ValueExpression>
+                    <Value>C:</Value>
+                  </ValueExpression>
+                </SimpleExpression>
+              </Expression>
+              <Expression>
+                <Contained>
+                  <MonitoringClass>$MPElement[Name="Windows!Microsoft.Windows.Computer"]$</MonitoringClass>
+                  <Expression>
+                    <Contained maxDepth="1">
+                      <MonitoringClass>$MPElement[Name="SQLPresentation!Microsoft.SQLServer.Generic.Presentation.ComputersGroup"]$</MonitoringClass>
+                    </Contained>
+                  </Expression>
+                </Contained>
+              </Expression>
+            </And>
+          </Expression>
+        </MembershipRule>
+      </MembershipRules>
+      </DataSource>
+              </Discovery>
+    </Discoveries>
+  </Monitoring>
+  <LanguagePacks>
+    <LanguagePack ID="ENU" IsDefault="true">
+      <DisplayStrings>
+        <DisplayString ElementID="F12.Payments.InstanceGroup.LogicalDisks.Contained.SQL.NotC.Discovery">
+          <Name>F12 Payments - Logical Disks Contained SQL Not C:</Name>
+          <Description>Description for the new discovery.</Description>
+        </DisplayString>
+        <DisplayString ElementID="F12.Payments.InstanceGroup.LogicalDisks.Contained.SQL.NotC">
+          <Name>F12 Payments - Logical Disks Contained SQL Not C:</Name>
+          <Description>Description for the new discovery.</Description>
+        </DisplayString>
+      </DisplayStrings>
+    </LanguagePack>
+  </LanguagePacks>
