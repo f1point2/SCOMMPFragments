@@ -1,6 +1,6 @@
  <Monitoring>
     <Monitors>
-      <UnitMonitor ID="F12.Payments.UnitMonitor.Performance.2State.Standard.ModuleCount" Accessibility="Public" Enabled="true" Target="F12.Aibi.AppServer" ParentMonitorID="Health!System.Health.PerformanceState" Remotable="true" Priority="Normal" TypeID="Perf!System.Performance.ConsecutiveSamplesThreshold" ConfirmDelivery="false">
+      <UnitMonitor ID="F12.Payments.UnitMonitor.Performance.2State.Standard.ModuleCount" Accessibility="Public" Enabled="true" Target="F12.Payments.AppServer" ParentMonitorID="Health!System.Health.PerformanceState" Remotable="true" Priority="Normal" TypeID="Perf!System.Performance.ConsecutiveSamplesThreshold" ConfirmDelivery="false">
         <Category>PerformanceHealth</Category>
         <AlertSettings AlertMessage="F12.Payments.UnitMonitor.Performance.2State.Standard.ModuleCount">
           <AlertOnState>Error</AlertOnState>
