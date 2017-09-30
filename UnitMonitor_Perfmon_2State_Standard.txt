@@ -1,0 +1,67 @@
+ <Monitoring>
+    <Monitors>
+      <UnitMonitor ID="F12.Payments.UnitMonitor.Performance.2State.Standard.ModuleCount" Accessibility="Public" Enabled="true" Target="F12.Aibi.AppServer" ParentMonitorID="Health!System.Health.PerformanceState" Remotable="true" Priority="Normal" TypeID="Perf!System.Performance.ConsecutiveSamplesThreshold" ConfirmDelivery="false">
+        <Category>PerformanceHealth</Category>
+        <AlertSettings AlertMessage="F12.Payments.UnitMonitor.Performance.2State.Standard.ModuleCount">
+          <AlertOnState>Error</AlertOnState>
+          <AutoResolve>true</AutoResolve>
+          <AlertPriority>Normal</AlertPriority>
+          <AlertSeverity>MatchMonitorHealth</AlertSeverity>
+          <AlertParameters>
+            <AlertParameter1>$Data/Context/Value$</AlertParameter1>
+            <AlertParameter2>$Data/Context/SampleValue$</AlertParameter2>
+            <AlertParameter3>$Data[Default='']/Context/InstanceName$</AlertParameter3>
+            <AlertParameter4>$Data[Default='']/Context/ObjectName$</AlertParameter4>
+            <AlertParameter5>$Data[Default='']/Context/CounterName$</AlertParameter5>
+            <AlertParameter6>$Data[Default='']/Context/TimeSampled$</AlertParameter6>
+          </AlertParameters>
+        </AlertSettings>
+        <OperationalStates>
+          <OperationalState ID="ConditionTrue" MonitorTypeStateID="ConditionTrue" HealthState="Error" />
+          <OperationalState ID="ConditionFalse" MonitorTypeStateID="ConditionFalse" HealthState="Success" />
+        </OperationalStates>
+        <Configuration>
+          <ComputerName>$Target/Host/Property[Type='Windows!Microsoft.Windows.Computer"]/PrincipalName$</ComputerName>
+          <CounterName>Module Count</CounterName>
+          <ObjectName>Health Service</ObjectName>
+          <InstanceName />
+          <AllInstances>false</AllInstances>
+          <Frequency>300</Frequency>
+          <Threshold>90</Threshold>
+          <Direction>greater</Direction>
+          <NumSamples>3</NumSamples>
+        </Configuration>
+      </UnitMonitor>
+    </Monitors>
+  </Monitoring>
+  <Presentation>
+    <StringResources>
+      <StringResource ID="F12.Payments.UnitMonitor.Performance.2State.Standard.ModuleCount.AlertMessage" />
+    </StringResources>
+  </Presentation>
+  <LanguagePacks>
+    <LanguagePack ID="ENU" IsDefault="true">
+      <DisplayStrings>
+        <DisplayString ElementID="F12.Payments.UnitMonitor.Performance.2State.Standard.ModuleCount">
+          <Name>Health Service Module Count Monitor</Name>
+          <Description>Description for the new unit monitor.</Description>
+        </DisplayString>
+        <DisplayString ElementID="F12.Payments.UnitMonitor.Performance.2State.Standard.ModuleCount.AlertMessage">
+          <Name>Example Monitors - Module Count</Name>
+          <Description>Performance Counter over threshold for {0} consecutive occurrences. 
+			Last value = {1} Instance {2}
+            Object =     {3}
+            Counter =    {4}
+            At time =    {5}</Description>
+        </DisplayString>
+        <DisplayString ElementID="F12.Payments.UnitMonitor.Performance.2State.Standard.ModuleCount" SubElementID="ConditionTrue">
+          <Name>Over Threshold</Name>
+          <Description>Over Threshold</Description>
+        </DisplayString>
+        <DisplayString ElementID="F12.Payments.UnitMonitor.Performance.2State.Standard.ModuleCount" SubElementID="ConditionFalse">
+          <Name>Under Threshold</Name>
+          <Description>Under Threshold</Description>
+        </DisplayString>
+      </DisplayStrings>
+    </LanguagePack>
+  </LanguagePacks>
