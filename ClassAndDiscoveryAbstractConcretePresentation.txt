@@ -1,0 +1,240 @@
+  <TypeDefinitions>
+    <EntityTypes>
+      <ClassTypes>
+        <ClassType ID="MyApp.Server" Base="Windows!Microsoft.Windows.ComputerRole" Accessibility="Public" Abstract="true" Hosted="true" Singleton="false">
+          <Property ID="Version" Key="false" Type="string" />
+          <Property ID="InstallPath" Key="false" Type="string" />
+          <Property ID="QueueLength" Key="false" Type="string" />
+          <Property ID="Function" Key="false" Type="string" />
+        </ClassType>
+        <ClassType ID="MyApp.Server.FE" Base="MyApp.Server" Abstract="false" Accessibility="Public" Hosted="true" Singleton="false" />
+        <ClassType ID="MyApp.Server.BE" Base="MyApp.Server" Abstract="false" Accessibility="Public" Hosted="true" Singleton="false" />
+      </ClassTypes>
+    </EntityTypes>
+  </TypeDefinitions>
+<Monitoring>
+    <Discoveries>
+      <Discovery ID="MyApp.Discover.Application.BE" Target="Windows!Microsoft.Windows.Server.OperatingSystem" Enabled="true" ConfirmDelivery="false" Remotable="true" Priority="Normal">
+        <Category>Discovery</Category>
+        <DiscoveryTypes>
+          <DiscoveryClass TypeID="MyApp.Server.BE" />
+        </DiscoveryTypes>
+        <DataSource ID="DS" TypeID="Windows!Microsoft.Windows.FilteredRegistryDiscoveryProvider">
+          <ComputerName>$Target/Host/Property[Type="Windows!Microsoft.Windows.Computer"]/PrincipalName$</ComputerName>
+          <RegistryAttributeDefinitions>
+            <RegistryAttributeDefinition>
+              <AttributeName>Function</AttributeName>
+              <Path>SOFTWARE\SCOMDiscoveryData\CandA\Function</Path>
+              <PathType>1</PathType>
+              <AttributeType>1</AttributeType>
+            </RegistryAttributeDefinition>
+            <RegistryAttributeDefinition>
+              <AttributeName>Version</AttributeName>
+              <Path>SOFTWARE\SCOMDiscoveryData\CandA\Version</Path>
+              <PathType>1</PathType>
+              <AttributeType>1</AttributeType>
+            </RegistryAttributeDefinition>
+            <RegistryAttributeDefinition>
+              <AttributeName>InstallPath</AttributeName>
+              <Path>SOFTWARE\SCOMDiscoveryData\CandA\InstallPath</Path>
+              <PathType>1</PathType>
+              <AttributeType>1</AttributeType>
+            </RegistryAttributeDefinition>
+          </RegistryAttributeDefinitions>
+          <Frequency>3600</Frequency>
+          <ClassId>$MPElement[Name="MyApp.Server.BE"]$</ClassId>
+          <InstanceSettings>
+            <Settings>
+              <Setting>
+                <Name>$MPElement[Name="Windows!Microsoft.Windows.Computer"]/PrincipalName$</Name>
+                <Value>$Target/Host/Property[Type="Windows!Microsoft.Windows.Computer"]/PrincipalName$</Value>
+              </Setting>
+              <Setting>
+                <Name>$MPElement[Name="System!System.Entity"]/DisplayName$</Name>
+                <Value>$Target/Host/Property[Type="Windows!Microsoft.Windows.Computer"]/PrincipalName$</Value>
+              </Setting>
+              <Setting>
+                <Name>$MPElement[Name="MyApp.Server"]/Version$</Name>
+                <Value>$Data/Values/Version$</Value>
+              </Setting>
+              <Setting>
+                <Name>$MPElement[Name="MyApp.Server"]/InstallPath$</Name>
+                <Value>$Data/Values/InstallPath$</Value>
+              </Setting>
+              <Setting>
+                <Name>$MPElement[Name="MyApp.Server"]/Function$</Name>
+                <Value>$Data/Values/Function$</Value>
+              </Setting>
+            </Settings>
+          </InstanceSettings>
+          <Expression>
+            <SimpleExpression>
+              <ValueExpression>
+                <XPathQuery Type="String">Values/Function</XPathQuery>
+              </ValueExpression>
+              <Operator>Equal</Operator>
+              <ValueExpression>
+                <Value Type="String">BE</Value>
+              </ValueExpression>
+            </SimpleExpression>
+          </Expression>
+        </DataSource>
+      </Discovery>
+      <Discovery ID="MyApp.Discover.Application.FE" Target="Windows!Microsoft.Windows.Server.OperatingSystem" Enabled="true" ConfirmDelivery="false" Remotable="true" Priority="Normal">
+        <Category>Discovery</Category>
+        <DiscoveryTypes>
+          <DiscoveryClass TypeID="MyApp.Server.FE" />
+        </DiscoveryTypes>
+        <DataSource ID="DS" TypeID="Windows!Microsoft.Windows.FilteredRegistryDiscoveryProvider">
+          <ComputerName>$Target/Host/Property[Type="Windows!Microsoft.Windows.Computer"]/PrincipalName$</ComputerName>
+          <RegistryAttributeDefinitions>
+            <RegistryAttributeDefinition>
+              <AttributeName>Function</AttributeName>
+              <Path>SOFTWARE\SCOMDiscoveryData\CandA\Function</Path>
+              <PathType>1</PathType>
+              <AttributeType>1</AttributeType>
+            </RegistryAttributeDefinition>
+            <RegistryAttributeDefinition>
+              <AttributeName>Version</AttributeName>
+              <Path>SOFTWARE\SCOMDiscoveryData\CandA\Version</Path>
+              <PathType>1</PathType>
+              <AttributeType>1</AttributeType>
+            </RegistryAttributeDefinition>
+            <RegistryAttributeDefinition>
+              <AttributeName>InstallPath</AttributeName>
+              <Path>SOFTWARE\SCOMDiscoveryData\CandA\InstallPath</Path>
+              <PathType>1</PathType>
+              <AttributeType>1</AttributeType>
+            </RegistryAttributeDefinition>
+          </RegistryAttributeDefinitions>
+          <Frequency>3600</Frequency>
+          <ClassId>$MPElement[Name="MyApp.Server.FE"]$</ClassId>
+          <InstanceSettings>
+            <Settings>
+              <Setting>
+                <Name>$MPElement[Name="Windows!Microsoft.Windows.Computer"]/PrincipalName$</Name>
+                <Value>$Target/Host/Property[Type="Windows!Microsoft.Windows.Computer"]/PrincipalName$</Value>
+              </Setting>
+              <Setting>
+                <Name>$MPElement[Name="System!System.Entity"]/DisplayName$</Name>
+                <Value>$Target/Host/Property[Type="Windows!Microsoft.Windows.Computer"]/PrincipalName$</Value>
+              </Setting>
+              <Setting>
+                <Name>$MPElement[Name="MyApp.Server"]/Version$</Name>
+                <Value>$Data/Values/Version$</Value>
+              </Setting>
+              <Setting>
+                <Name>$MPElement[Name="MyApp.Server"]/InstallPath$</Name>
+                <Value>$Data/Values/InstallPath$</Value>
+              </Setting>
+              <Setting>
+                <Name>$MPElement[Name="MyApp.Server"]/Function$</Name>
+                <Value>$Data/Values/Function$</Value>
+              </Setting>
+            </Settings>
+          </InstanceSettings>
+          <Expression>
+            <SimpleExpression>
+              <ValueExpression>
+                <XPathQuery Type="String">Values/Function</XPathQuery>
+              </ValueExpression>
+              <Operator>Equal</Operator>
+              <ValueExpression>
+                <Value Type="String">FE</Value>
+              </ValueExpression>
+            </SimpleExpression>
+          </Expression>
+        </DataSource>
+      </Discovery>
+    </Discoveries>
+  </Monitoring>
+  <Presentation>
+    <Views>
+      <View ID="ConcreteAndAbstract.StateView.MyAppServers.FE" Accessibility="Internal" Target="MyApp.Server.FE" TypeID="SC!Microsoft.SystemCenter.StateViewType" Visible="true">
+        <Category>Operations</Category>
+      </View>
+      <View ID="ConcreteAndAbstract.StateView.MyAppServers.BE" Accessibility="Internal" Target="MyApp.Server.BE" TypeID="SC!Microsoft.SystemCenter.StateViewType" Visible="true">
+        <Category>Operations</Category>
+      </View>
+      <View ID="ConcreteAndAbstract.StateView.MyAppServers" Accessibility="Internal" Target="MyApp.Server" TypeID="SC!Microsoft.SystemCenter.StateViewType" Visible="true">
+        <Category>Operations</Category>
+      </View>
+    </Views>
+    <Folders>
+      <Folder ID="MyApplicationFolder.ConcreteClasses" Accessibility="Internal" ParentFolder="SC!Microsoft.SystemCenter.Monitoring.ViewFolder.Root" />
+      <Folder ID="MyApplicationFolder.FE" Accessibility="Internal" ParentFolder="MyApplicationFolder.ConcreteClasses" />
+      <Folder ID="MyApplicationFolder.BE" Accessibility="Internal" ParentFolder="MyApplicationFolder.ConcreteClasses" />
+    </Folders>
+    <FolderItems>
+      <FolderItem ElementID="ConcreteAndAbstract.StateView.MyAppServers.FE" Folder="MyApplicationFolder.FE" ID="ConcreteAndAbstract.StateView.MyAppServers.FE.FolderItem" />
+      <FolderItem ElementID="ConcreteAndAbstract.StateView.MyAppServers.BE" Folder="MyApplicationFolder.BE" ID="ConcreteAndAbstract.StateView.MyAppServers.BE.FolderItem" />
+      <FolderItem ElementID="ConcreteAndAbstract.StateView.MyAppServers" Folder="MyApplicationFolder.ConcreteClasses" ID="ConcreteAndAbstract.StateView.MyAppServers.FolderItem" />
+    </FolderItems>
+  </Presentation>
+  <LanguagePacks>
+    <LanguagePack ID="ENU" IsDefault="true">
+      <DisplayStrings>
+        <DisplayString ElementID="MyApp.Server.FE">
+          <Name>My Front End Application Server</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="MyApp.Server.BE">
+          <Name>My Back End Application Server</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="MyApp.Server">
+          <Name>My Application Server</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="MyApp.Server" SubElementID="Version">
+          <Name>Version</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="MyApp.Server" SubElementID="InstallPath">
+          <Name>Install Path</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="MyApp.Server" SubElementID="QueueLength">
+          <Name>Queue Length</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="MyApp.Server" SubElementID="Function">
+          <Name>Function</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="MyApplicationFolder.ConcreteClasses">
+          <Name>My Application Servers</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="MyApplicationFolder.FE">
+          <Name>My Application Front End Servers</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="MyApplicationFolder.BE">
+          <Name>My Application Back End Servers</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="ConcreteAndAbstract.StateView.MyAppServers.FE">
+          <Name>My front End App Servers State View</Name>
+          <Description>Description for the new view</Description>
+        </DisplayString>
+        <DisplayString ElementID="ConcreteAndAbstract.StateView.MyAppServers.BE">
+          <Name>My Back End App Servers State View</Name>
+          <Description>Description for the new view</Description>
+        </DisplayString>
+        <DisplayString ElementID="ConcreteAndAbstract.StateView.MyAppServers">
+          <Name>My App Servers State View</Name>
+          <Description>Description for the new view</Description>
+        </DisplayString>
+        <DisplayString ElementID="MyApp.Discover.Application.BE">
+          <Name>Discover My App Back End Server</Name>
+          <Description>Description for the new discovery.</Description>
+        </DisplayString>
+        <DisplayString ElementID="MyApp.Discover.Application.FE">
+          <Name>Discover My App Front End Server</Name>
+          <Description>Description for the new discovery.</Description>
+        </DisplayString>
+      </DisplayStrings>
+      <KnowledgeArticles></KnowledgeArticles>
+    </LanguagePack>
+  </LanguagePacks>

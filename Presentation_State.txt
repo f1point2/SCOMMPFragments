@@ -1,0 +1,20 @@
+<Presentation>
+    <Views>
+      <View ID="F12.Views.State" Accessibility="Internal" Target="XXXXXXX" TypeID="SC!Microsoft.SystemCenter.StateViewType" Visible="true">
+        <Category>Operations</Category>
+      </View>
+    </Views>
+    <FolderItems>
+      <FolderItem ElementID="Examples.Presentation.StateView.MyAppServers" Folder="F12.Payments.Folder" ID="F12.Payments.Folder.FolderItem" />
+   </FolderItems>
+  </Presentation>
+  <LanguagePacks>
+    <LanguagePack ID="ENU" IsDefault="true">
+      <DisplayStrings>
+        <DisplayString ElementID="Examples.Presentation.StateView.MyAppServers">
+          <Name> State View</Name>
+          <Description>Description for the new view</Description>
+        </DisplayString>
+      </DisplayStrings>
+    </LanguagePack>
+  </LanguagePacks>

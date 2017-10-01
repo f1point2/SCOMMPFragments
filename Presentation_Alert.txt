@@ -1,0 +1,26 @@
+
+  <Presentation>
+    <Views>
+      <View ID="F12.Payments.View.Alert" Accessibility="Public" Target="F12.Payments.AppServer" TypeID="SC!Microsoft.SystemCenter.AlertViewType" Visible="true">
+        <Category>Operations</Category>
+  <Criteria>
+    <ResolutionState>
+      <StateRange Operator="NotEquals">255</StateRange>
+    </ResolutionState>
+  </Criteria>
+      </View>
+    </Views>
+    <FolderItems>
+      <FolderItem ElementID="F12.Payments.View.Alert" Folder="F12.Payments.Folder" ID="F12.Payments.View.Alert.FolderItem" />
+    </FolderItems>
+  </Presentation>
+  <LanguagePacks>
+    <LanguagePack ID="ENU" IsDefault="true">
+      <DisplayStrings>
+        <DisplayString ElementID="F12.Payments.View.Alert">
+          <Name>Alert View 678</Name>
+          <Description>Description for the new view</Description>
+        </DisplayString>
+      </DisplayStrings>
+    </LanguagePack>
+  </LanguagePacks>

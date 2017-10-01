@@ -1,0 +1,24 @@
+  <Presentation>
+    <Folders>
+      
+      <Folder ID="F12.Payments.Folder" Accessibility="Public" ParentFolder="SC!Microsoft.SystemCenter.Monitoring.ViewFolder.Root" />
+    
+    </Folders>
+
+    <FolderItems>
+
+    </FolderItems>
+    
+  </Presentation>
+  <LanguagePacks>
+    <LanguagePack ID="ENU" IsDefault="true">
+      <DisplayStrings>
+        
+        <DisplayString ElementID="F12.Payments.Folder">
+          <Name>F12 Payments</Name>
+          <Description></Description>
+        </DisplayString>
+        
+      </DisplayStrings>
+    </LanguagePack>
+  </LanguagePacks>

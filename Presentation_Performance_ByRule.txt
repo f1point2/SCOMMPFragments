@@ -1,0 +1,26 @@
+<Presentation>
+    <Views>
+      <View ID="F12.Payments.Views.Rules" Accessibility="Internal" Target="F12.Payments.AppServer" TypeID="SC!Microsoft.SystemCenter.PerformanceViewType" Visible="true">
+        <Category>Operations</Category>
+        <Criteria>
+          <RuleList>
+            <!-- http://social.technet.microsoft.com/wiki/contents/articles/15310.operations-manager-management-pack-authoring-views.aspx#Performance_Views -->
+            <Rule>$MPElement[Name='Example.SimpleRules.Collect.Perfmon.WorkflowCount']$</Rule>
+          </RuleList>
+        </Criteria>
+      </View>
+    </Views>
+    <FolderItems>
+      <FolderItem ElementID="F12.Payments.Views.Rules" Folder="F12.Payments.Rule.Collect.Perfmon.WorkflowCount" ID="F12.Payments.Views.Rules.FolderItem" />
+    </FolderItems>
+  </Presentation>
+  <LanguagePacks>
+    <LanguagePack ID="ENU" IsDefault="true">
+      <DisplayStrings>
+        <DisplayString ElementID="F12.Payments.Views.Rules">
+          <Name>F12 - Perfmon - Workflow count</Name>
+          <Description>Description for the new view</Description>
+        </DisplayString>
+      </DisplayStrings>
+    </LanguagePack>
+  </LanguagePacks>

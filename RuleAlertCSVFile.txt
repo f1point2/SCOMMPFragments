@@ -1,0 +1,62 @@
+ <Monitoring>
+    <Rules>
+      <Rule ID="F12.Payments.Rule.Alert.Log.FailedBackup" Target="F12.Payments.AppServer" Enabled="true" ConfirmDelivery="false" Remotable="true" Priority="Normal" DiscardLevel="100">
+        <Category>Alert</Category>
+        <DataSources>
+          <DataSource ID="DS" TypeID="AppLog!System.ApplicationLog.GenericCSVLog.FilteredEventProvider">
+            <LogFileDirectory>C:\VSExample\BackupFolder</LogFileDirectory>
+            <LogFilePattern>cp*.log</LogFilePattern>
+            <LogIsUTF8>false</LogIsUTF8>
+            <Separator>","</Separator>
+            <Expression>
+              <RegExExpression>
+                <ValueExpression>
+                  <XPathQuery Type="String">Params/Param[3]</XPathQuery>
+                </ValueExpression>
+                <Operator>ContainsSubstring</Operator>
+                <Pattern>Failed Backup</Pattern>
+              </RegExExpression>
+            </Expression>
+          </DataSource>
+        </DataSources>
+        <WriteActions>
+          <WriteAction ID="Alert" TypeID="Health!System.Health.GenerateAlert">
+            <Priority>1</Priority>
+            <Severity>2</Severity>
+            <AlertMessageId>$MPElement[Name="F12.Payments.Rule.Alert.Log.FailedBackup.AlertMessage"]$</AlertMessageId>
+            <AlertParameters>
+              <AlertParameter1>$Target/Host/Property[Type="Windows!Microsoft.Windows.Computer"]/PrincipalName$</AlertParameter1>
+              <AlertParameter2>$Data/Params/Param[1]$</AlertParameter2>
+              <AlertParameter3>$Data/Params/Param[2]$</AlertParameter3>
+              <AlertParameter4>$Data/Params/Param[3]$</AlertParameter4>
+              <AlertParameter5>$Data/Params/Param[4]$</AlertParameter5>
+            </AlertParameters>
+          </WriteAction>
+        </WriteActions>
+      </Rule>
+    </Rules>
+  </Monitoring>
+  <Presentation>
+    <StringResources>
+      <StringResource ID="F12.Payments.Rule.Alert.Log.FailedBackup.AlertMessage" />
+    </StringResources>
+  </Presentation>
+  <LanguagePacks>
+    <LanguagePack ID="ENU" IsDefault="true">
+      <DisplayStrings>
+        <DisplayString ElementID="F12.Payments.Rule.Alert.Log.FailedBackup">
+          <Name>F12 Payments - Log File - Failed Backup</Name>
+          <Description>Description for the new alert rule.</Description>
+        </DisplayString>
+        <DisplayString ElementID="F12.Payments.Rule.Alert.Log.FailedBackup.AlertMessage">
+          <Name>F12 Payments - Failed Backup</Name>
+          <Description>Log entry on server {0} contains the following information:
+
+Date: {1}
+Time: {2}
+Error: {3}
+Details: {4}	</Description>
+        </DisplayString>
+      </DisplayStrings>
+    </LanguagePack>
+  </LanguagePacks>
