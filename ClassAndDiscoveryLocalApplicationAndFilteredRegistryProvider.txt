@@ -79,10 +79,6 @@ Values 1, 2, and 3 are used only when the PathType is set to 1.
           <Name>F12 Payments Application Server</Name>
           <Description></Description>
         </DisplayString>
-        <DisplayString ElementID="F12.Payments.AppServer" SubElementID="Version">
-          <Name>Version</Name>
-          <Description></Description>
-        </DisplayString>
         <DisplayString ElementID="F12.Payments.AppServer.Discovery">
           <Name>Discover F12 Payments Application Server</Name>
           <Description>Description for the new discovery.</Description>
