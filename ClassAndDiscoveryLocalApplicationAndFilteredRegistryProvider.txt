@@ -36,12 +36,6 @@ Values 1, 2, and 3 are used only when the PathType is set to 1.
               <PathType>0</PathType>
               <AttributeType>0</AttributeType>
             </RegistryAttributeDefinition>
-            <RegistryAttributeDefinition>
-              <AttributeName>Version</AttributeName>
-              <Path>SOFTWARE\SCOMDiscoveryData\Payments\Version</Path>
-              <PathType>1</PathType>
-              <AttributeType>1</AttributeType>
-            </RegistryAttributeDefinition>
           </RegistryAttributeDefinitions>
           <Frequency>3600</Frequency>
           <ClassId>$MPElement[Name="F12.Payments.AppServer"]$</ClassId>
